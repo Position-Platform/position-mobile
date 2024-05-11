@@ -19,3 +19,26 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env
+    - assets/images/png/
+    - assets/images/svg/
+    - assets/images/categories/logo/
+    - assets/images/categories/logo/map/
+
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/open_sans/Roboto-Regular.ttf
+    - family: OpenSans-Bold
+      fonts:
+        - asset: assets/fonts/open_sans/Roboto-Bold.ttf
+    - family: OpenSans-Light
+      fonts:
+        - asset: assets/fonts/open_sans/Roboto-Light.ttf
+    - family: OpenSans-Semibold
+      fonts:
+        - asset: assets/fonts/open_sans/Roboto-Medium.ttf
+    - family: OpenSans-Italic
+      fonts:
+        - asset: assets/fonts/open_sans/Roboto-Italic.ttf
