@@ -1,0 +1,21 @@
+name: position
+description: "Position est une application qui permets de trouver des
+  entreprises autour de vous."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.4 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  change_app_package_name: ^1.1.0
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
