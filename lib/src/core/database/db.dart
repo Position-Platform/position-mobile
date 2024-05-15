@@ -4,10 +4,14 @@ import 'package:drift/native.dart';
 import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:position/src/core/app/db/setting.converter.dart';
-import 'package:position/src/core/app/db/setting.dao.dart';
-import 'package:position/src/core/app/db/setting.table.dart';
-import 'package:position/src/core/app/models/setting_model/setting.dart';
+import 'package:position/src/modules/auth/db/setting/setting.converter.dart';
+import 'package:position/src/modules/auth/db/setting/setting.dao.dart';
+import 'package:position/src/modules/auth/db/setting/setting.table.dart';
+import 'package:position/src/modules/auth/models/setting_model/setting.dart';
+import 'package:position/src/modules/auth/db/user/user.converter.dart';
+import 'package:position/src/modules/auth/db/user/user.dao.dart';
+import 'package:position/src/modules/auth/db/user/user.table.dart';
+import 'package:position/src/modules/auth/models/user_model/user.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
@@ -16,8 +20,10 @@ part 'db.g.dart';
 // Annotation pour indiquer que cette classe est une base de données Drift
 @DriftDatabase(tables: [
   SettingTable,
+  UserTable,
 ], daos: [
   SettingDao,
+  UserDao,
 ])
 class MyDatabase extends _$MyDatabase {
   // Constructeur pour spécifier l'emplacement de la base de données

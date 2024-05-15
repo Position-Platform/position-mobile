@@ -22,6 +22,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "appname": MessageLookupByLibrary.simpleMessage("Position")
+        "appname": MessageLookupByLibrary.simpleMessage("Position"),
+        "askAccess": MessageLookupByLibrary.simpleMessage("Demandez l\'access"),
+        "enableGps": MessageLookupByLibrary.simpleMessage(
+            "Assurez-vous d\'activer le GPS."),
+        "go": MessageLookupByLibrary.simpleMessage("Allez-y"),
+        "gpsAccess":
+            MessageLookupByLibrary.simpleMessage("Un accès GPS est nécessaire"),
+        "next": MessageLookupByLibrary.simpleMessage("Suivant"),
+        "noInternet":
+            MessageLookupByLibrary.simpleMessage("Pas de connexion internet"),
+        "serverError":
+            MessageLookupByLibrary.simpleMessage("Une erreur est survenue"),
+        "skip": MessageLookupByLibrary.simpleMessage("Passer"),
+        "subtitle1": MessageLookupByLibrary.simpleMessage(
+            "Impression de plan officiel de localisation, partage, enregistrement dans ses favoris ou naviguation d\'un endroit vers un autre Pharmacie de garde, banque, centre de santé, écoles, infrastructures sociales et services publics"),
+        "subtitle2": MessageLookupByLibrary.simpleMessage(
+            "Une boutique virtuelle et un marché digital pour les activités formelles et informelles ..."),
+        "subtitle3": MessageLookupByLibrary.simpleMessage(
+            "Déclarations de Travaux, suivre l’actualité locale via les avis et annonces"),
+        "title1": MessageLookupByLibrary.simpleMessage(
+            "Rechercher les points d\'intérêt et accéder aux services essentiels de la ville"),
+        "title2": MessageLookupByLibrary.simpleMessage(
+            "Exposer ses compétences, ses produits et services en ligne"),
+        "title3": MessageLookupByLibrary.simpleMessage(
+            "Trouver les infos pratiques et consulter l’agenda des manifestations"),
+        "tryAgain": MessageLookupByLibrary.simpleMessage("Reessayez")
       };
 }

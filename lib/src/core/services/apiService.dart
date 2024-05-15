@@ -11,5 +11,41 @@ abstract class ApiService extends ChopperService {
 
   //Settings
   @Get(path: '/api/settings', headers: {'Accept': 'application/json'})
-  Future<Response> getAppSettings(@Header('Authorization') String token);
+  Future<Response> getAppSettings();
+
+  // User Api
+  @Post(path: '/api/auth/login', headers: {'Accept': 'application/json'})
+  Future<Response> login(@Body() Map<String, dynamic> body);
+
+  @Post(path: '/api/auth/register', headers: {'Accept': 'application/json'})
+  Future<Response> register(@Body() Map<String, dynamic> body);
+
+  @Post(
+      path: '/api/auth/register/facebook',
+      headers: {'Accept': 'application/json'})
+  Future<Response> registerfacebook(@Body() Map<String, dynamic> body);
+
+  @Post(
+      path: '/api/auth/register/google',
+      headers: {'Accept': 'application/json'})
+  Future<Response> registergoogle(@Body() Map<String, dynamic> body);
+
+  @Get(path: '/api/user/me', headers: {'Accept': 'application/json'})
+  Future<Response> getuser(
+    @Header('Authorization') String token,
+  );
+
+  @Post(
+      path: '/api/auth/password/forgot',
+      headers: {'Accept': 'application/json'})
+  Future<Response> forgetPassword(@Body() Map<String, dynamic> body);
+
+  @Post(
+      path: '/api/auth/password/reset', headers: {'Accept': 'application/json'})
+  Future<Response> resetPassword(@Body() Map<String, dynamic> body);
+
+  @Get(path: '/api/auth/logout', headers: {'Accept': 'application/json'})
+  Future<Response> logout(
+    @Header('Authorization') String token,
+  );
 }

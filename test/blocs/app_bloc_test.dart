@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:position/src/core/utils/themes.dart';
 import 'package:test/test.dart';
 
-import 'package:position/src/core/app/bloc/app_bloc.dart';
+import 'package:position/src/modules/app/bloc/app_bloc.dart';
 
 class MockHydratedBlocStorage extends Mock implements HydratedStorage {}
 
