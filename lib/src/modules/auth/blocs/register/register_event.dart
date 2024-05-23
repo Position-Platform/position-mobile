@@ -110,3 +110,18 @@ class RegisterSubmitted extends RegisterEvent {
     return 'RegisterSubmitted { email: $email, password: $password , name: $name , phone : $phone  }';
   }
 }
+
+class RegisterPasswordVisibility extends RegisterEvent {
+  final bool? passwordVisibility;
+  final bool? cpasswordVisibility;
+
+  const RegisterPasswordVisibility(
+      {@required this.passwordVisibility, @required this.cpasswordVisibility});
+
+  @override
+  List<Object> get props => [passwordVisibility!, cpasswordVisibility!];
+
+  @override
+  String toString() =>
+      'LoginPasswordVisibility { passwordVisibility: $passwordVisibility, cpasswordVisibility: $cpasswordVisibility}';
+}

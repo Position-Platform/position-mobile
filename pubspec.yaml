@@ -12,6 +12,7 @@ dependencies:
   cached_network_image: ^3.3.1
   chopper: ^8.0.0
   drift: ^2.18.0
+  dropdown_button2: ^2.3.9
   equatable: ^2.0.5
   firebase_core: ^2.31.0
   firebase_crashlytics: ^3.5.5

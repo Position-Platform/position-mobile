@@ -31,6 +31,7 @@ Setting _$SettingFromJson(Map<String, dynamic> json) => Setting(
       defaultMapStyle: json['default_map_style'] as String?,
       isFacebookLoginEnabled: json['is_facebook_login_enabled'] as bool?,
       isGoogleLoginEnabled: json['is_google_login_enabled'] as bool?,
+      isOsmLoginEnabled: json['is_osm_login_enabled'] as bool?,
     );
 
 Map<String, dynamic> _$SettingToJson(Setting instance) => <String, dynamic>{
@@ -58,4 +59,5 @@ Map<String, dynamic> _$SettingToJson(Setting instance) => <String, dynamic>{
       'default_map_style': instance.defaultMapStyle,
       'is_facebook_login_enabled': instance.isFacebookLoginEnabled,
       'is_google_login_enabled': instance.isGoogleLoginEnabled,
+      'is_osm_login_enabled': instance.isOsmLoginEnabled,
     };

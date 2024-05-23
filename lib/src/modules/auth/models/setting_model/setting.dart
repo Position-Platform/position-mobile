@@ -51,6 +51,8 @@ class Setting {
   bool? isFacebookLoginEnabled;
   @JsonKey(name: 'is_google_login_enabled')
   bool? isGoogleLoginEnabled;
+  @JsonKey(name: 'is_osm_login_enabled')
+  bool? isOsmLoginEnabled;
 
   Setting({
     this.id,
@@ -77,6 +79,7 @@ class Setting {
     this.defaultMapStyle,
     this.isFacebookLoginEnabled,
     this.isGoogleLoginEnabled,
+    this.isOsmLoginEnabled,
   });
 
   factory Setting.fromJson(Map<String, dynamic> json) {

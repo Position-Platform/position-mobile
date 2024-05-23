@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:position/src/modules/auth/repositories/setting/settingRepository.dart';
-import 'package:position/src/core/helpers/sharedpreferences.dart';
 import 'package:position/src/core/utils/themes.dart';
 
 part 'app_event.dart';
@@ -10,10 +8,8 @@ part 'app_state.dart';
 
 // La classe AppBloc étend la classe HydratedBloc pour permettre la persistance de l'état de l'application
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
-  final SettingRepository? settingRepository;
-  final SharedPreferencesHelper? sharedPreferencesHelper;
   // Le constructeur de la classe initialise l'état initial de l'application avec un thème clair et la langue française
-  AppBloc({this.settingRepository, this.sharedPreferencesHelper})
+  AppBloc()
       : super(AppState(AppThemes.appThemeData[AppTheme.lightTheme],
             const Locale('fr', 'FR'))) {
     // Les méthodes _changeTheme et _changeLanguage sont appelées lorsqu'un événement ChangeTheme ou ChangeLanguage est émis

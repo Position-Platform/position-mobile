@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:position/src/modules/auth/api/setting/settingApiService.dart';
 import 'package:position/src/modules/auth/api/setting/settingApiServiceFactory.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
+import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
+import 'package:position/src/modules/auth/blocs/register/register_bloc.dart';
 import 'package:position/src/modules/auth/db/setting/setting.dao.dart';
 import 'package:position/src/modules/auth/repositories/setting/settingRepository.dart';
 import 'package:position/src/modules/auth/repositories/setting/settingRepositoryImpl.dart';
@@ -73,13 +75,14 @@ Future<void> init() async {
 
   //Bloc
   // Enregistrement des instances des différents blocs
-  getIt.registerFactory<AppBloc>(() => AppBloc(
-        settingRepository: getIt(),
-        sharedPreferencesHelper: getIt(),
-      ));
+  getIt.registerFactory<AppBloc>(() => AppBloc());
   getIt.registerFactory<GpsBloc>(() => GpsBloc());
   getIt.registerFactory<AuthBloc>(() => AuthBloc(
       authRepository: getIt(),
       sharedPreferencesHelper: getIt(),
       settingRepository: getIt()));
+  getIt.registerFactory<LoginBloc>(() =>
+      LoginBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
+  getIt.registerFactory<RegisterBloc>(() =>
+      RegisterBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
 }

@@ -3,12 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:position/generated/l10n.dart';
+import 'package:position/src/core/di/di.dart';
 import 'package:position/src/core/utils/colors.dart';
 import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/auth/blocs/auth/auth_bloc.dart';
+import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
+import 'package:position/src/modules/auth/views/loginPage.dart';
 import 'package:position/src/onboarding.dart';
 import 'package:position/src/splash.dart';
-import 'package:position/src/widgets/error.dart';
+import 'package:position/src/widgets/positionErrorWidget.dart';
 
 class InitPage extends StatelessWidget {
   // Constructeur de la classe InitPage
@@ -30,6 +33,15 @@ class InitPage extends StatelessWidget {
         }
         // Si l'état est AuthFailure, vérifier si initialLink est différent de null
         if (state is AuthFailure) {
+          return BlocProvider<LoginBloc>(
+            create: (context) => getIt<LoginBloc>(),
+            child: LoginPage(
+              setting: state.settings,
+            ),
+          );
+        }
+        // Si l'état est AuthSuccess, afficher la carte avec la position de l'utilisateur
+        if (state is AuthSuccess) {
           return Scaffold(
             body: Center(
               child: Text(
@@ -39,23 +51,20 @@ class InitPage extends StatelessWidget {
             ),
           );
         }
-        // Si l'état est AuthSuccess, afficher la carte avec la position de l'utilisateur
-        if (state is AuthSuccess) {}
         // Si l'état est AuthNoInternet, afficher un message d'erreur indiquant que l'application n'a pas accès à Internet
         if (state is AuthNoInternet) {
-          return errorWidget(
-              context,
-              PositionLocalizations.of(context).noInternet,
-              () => BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
+          return PositionErrorWidget(
+              message: PositionLocalizations.of(context).noInternet,
+              onPressed: () =>
+                  BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
         }
         // Si l'état est AuthServerError, afficher un message d'erreur indiquant qu'il y a eu une erreur de serveur
         if (state is AuthServerError) {
-          return errorWidget(
-              context,
-              PositionLocalizations.of(context).serverError,
-              () => BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
+          return PositionErrorWidget(
+              message: PositionLocalizations.of(context).serverError,
+              onPressed: () =>
+                  BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
         }
-
         // Par défaut, afficher l'écran de chargement
         return const SplashScreen();
       },

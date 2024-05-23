@@ -11,6 +11,8 @@ class RegisterState {
       isSubmitting; // Indique si le formulaire est en cours de soumission
   final bool? isSuccess; // Indique si la soumission du formulaire a réussi
   final bool? isFailure; // Indique si la soumission du formulaire a échoué
+  final bool? isPasswordVisible;
+  final bool? isCPasswordVisible;
 
   bool get isFormValid => // Indique si le formulaire est valide
       isEmailValid! && isPasswordValid! && isCPasswordValid! && isPhoneValid!;
@@ -23,6 +25,8 @@ class RegisterState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    this.isPasswordVisible,
+    this.isCPasswordVisible,
   });
 
   factory RegisterState.initial() {
@@ -35,6 +39,8 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordVisible: false,
+      isCPasswordVisible: false,
     );
   }
 
@@ -48,6 +54,8 @@ class RegisterState {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      isPasswordVisible: false,
+      isCPasswordVisible: false,
     );
   }
 
@@ -61,6 +69,8 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      isPasswordVisible: false,
+      isCPasswordVisible: false,
     );
   }
 
@@ -74,7 +84,35 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      isPasswordVisible: false,
+      isCPasswordVisible: false,
     );
+  }
+
+  factory RegisterState.passwordVisible() {
+    return const RegisterState(
+        isEmailValid: true,
+        isPhoneValid: true,
+        isPasswordValid: true,
+        isCPasswordValid: false,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: false,
+        isPasswordVisible: true,
+        isCPasswordVisible: false);
+  }
+
+  factory RegisterState.cpasswordVisible() {
+    return const RegisterState(
+        isEmailValid: true,
+        isPhoneValid: true,
+        isPasswordValid: true,
+        isCPasswordValid: false,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: false,
+        isPasswordVisible: false,
+        isCPasswordVisible: true);
   }
 
   RegisterState update({
@@ -82,6 +120,8 @@ class RegisterState {
     bool? isPasswordValid,
     bool? isCPasswordValid,
     bool? isPhoneValid,
+    bool? isPasswordVisible,
+    bool? isCPasswordVisible,
   }) {
     // Met à jour l'état en fonction des nouvelles valeurs
     return copyWith(
@@ -92,6 +132,8 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      isPasswordVisible: isPasswordVisible,
+      isCPasswordVisible: isCPasswordVisible,
     );
   }
 
@@ -104,6 +146,8 @@ class RegisterState {
     bool? isSubmitting,
     bool? isSuccess,
     bool? isFailure,
+    bool? isPasswordVisible,
+    bool? isCPasswordVisible,
   }) {
     // Crée une nouvelle instance de l'état avec les propriétés spécifiées mises à jour
     return RegisterState(
@@ -114,6 +158,8 @@ class RegisterState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
+      isCPasswordVisible: isCPasswordVisible ?? this.isCPasswordVisible,
     );
   }
 
@@ -128,6 +174,8 @@ class RegisterState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isPasswordVisible: $isPasswordVisible,
+      isCPasswordVisible: $isCPasswordVisible
     }''';
   }
 }

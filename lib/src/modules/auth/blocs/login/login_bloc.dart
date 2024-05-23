@@ -110,6 +110,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginPasswordVisibility event,
     Emitter<LoginState> emit,
   ) async {
-    emit(state.update(isPasswordVisible: !state.isPasswordVisible!));
+    emit(state.update(
+        isPasswordVisible: !state.isPasswordVisible!,
+        isCPasswordVisible: !state.isCPasswordVisible!));
   }
 }
