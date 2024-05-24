@@ -39,6 +39,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (firstOpen) {
       return emit(AuthFirstOpen());
+    } else if (setting.success!.maintenanceMode!) {
+      return emit(AuthMaintenance());
     } else {
       if (isSignedIn) {
         try {
@@ -63,6 +65,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final setting = await settingRepository!.getappsettings();
     if (firstOpen) {
       return emit(AuthFirstOpen());
+    } else if (setting.success!.maintenanceMode!) {
+      return emit(AuthMaintenance());
     } else {
       try {
         final userResult = await authRepository!.getuser(token!);
@@ -79,6 +83,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final setting = await settingRepository!.getappsettings();
+    if (setting.success!.maintenanceMode!) {
+      return emit(AuthMaintenance());
+    }
     await sharedPreferencesHelper!.setIsFirstOpen(false);
     return emit(AuthFailure(setting.success!));
   }
@@ -90,6 +97,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final token = await sharedPreferencesHelper!.getToken();
     final setting = await settingRepository!.getappsettings();
+    if (setting.success!.maintenanceMode!) {
+      return emit(AuthMaintenance());
+    }
     await authRepository!.logout(token!);
     await sharedPreferencesHelper!.deleteToken();
     return emit(AuthFailure(setting.success!));

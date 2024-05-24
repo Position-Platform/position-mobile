@@ -59,11 +59,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "labelIdText":
             MessageLookupByLibrary.simpleMessage("Email or username"),
         "labelPasswordText": MessageLookupByLibrary.simpleMessage("Password"),
+        "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
         "loggin": MessageLookupByLibrary.simpleMessage("Connection..."),
         "login": MessageLookupByLibrary.simpleMessage("LOGIN"),
         "loginFailed": MessageLookupByLibrary.simpleMessage("Login Failed"),
         "loginSuccess":
             MessageLookupByLibrary.simpleMessage("Login successful"),
+        "maintenance": MessageLookupByLibrary.simpleMessage(
+            "Your application is being maintained. Try again later"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
         "noAccount": MessageLookupByLibrary.simpleMessage("No Account yet?  "),
         "noInternet":

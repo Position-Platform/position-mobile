@@ -299,7 +299,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionValideButton(
                             width: 130,
                             height: 35,
-                            color: primaryColor,
+                            color: isRegisterButtonEnabled(state)
+                                ? primaryColor
+                                : greyColor,
                             textColor: whiteColor,
                             buttonText:
                                 PositionLocalizations.of(context).register,

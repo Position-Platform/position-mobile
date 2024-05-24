@@ -53,5 +53,7 @@
   "register" : "Register",
   "confirmPassword": "Confirm Password",
   "error": "Error",
-  "resetsuccess" : "Password reset successful"
+  "resetsuccess" : "Password reset successful",
+  "loading": "Loading...",
+  "maintenance": "Your application is being maintained. Try again later"
 }

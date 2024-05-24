@@ -580,6 +580,26 @@ class PositionLocalizations {
       args: [],
     );
   }
+
+  /// `Chargement...`
+  String get loading {
+    return Intl.message(
+      'Chargement...',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre application est en cours de maintenance. Reessayez plus tard`
+  String get maintenance {
+    return Intl.message(
+      'Votre application est en cours de maintenance. Reessayez plus tard',
+      name: 'maintenance',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate

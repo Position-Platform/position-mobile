@@ -39,12 +39,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     super.dispose();
   }
 
+  bool get isPopulated => _emailController.text.isNotEmpty;
+
   void _onForgotPasswordSubmitted() {
-    _loginBloc!.add(
-      PasswordForgot(
-        email: _emailController.text,
-      ),
-    );
+    if (isPopulated) {
+      _loginBloc!.add(
+        PasswordForgot(
+          email: _emailController.text,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(PositionLocalizations.of(context).addEmail),
+                const Icon(Icons.error)
+              ],
+            ),
+            backgroundColor: redColor,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+    }
   }
 
   @override
@@ -98,7 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     content: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(PositionLocalizations.of(context).loggin),
+                        Text(PositionLocalizations.of(context).loading),
                         const CircularProgressIndicator(),
                       ],
                     ),

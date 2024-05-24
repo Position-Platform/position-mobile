@@ -52,5 +52,7 @@
   "register" : "S'INSCRIRE",
   "confirmPassword": "Confirmer le Mot de Passe",
   "error": "Une erreur est survenue",
-  "resetsuccess" : "reinitialisation effectuée"
+  "resetsuccess" : "reinitialisation effectuée",
+  "loading": "Chargement...",
+  "maintenance": "Votre application est en cours de maintenance. Reessayez plus tard"
 }

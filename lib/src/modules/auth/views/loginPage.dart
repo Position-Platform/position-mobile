@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                                   passwordVisibility: state.isPasswordVisible!,
                                   cpasswordVisibility: false));
                             },
-                            obscureText: state.isPasswordVisible!),
+                            obscureText: !state.isPasswordVisible!),
                         !state.isPasswordValid!
                             ? Text(
                                 PositionLocalizations.of(context).invalidPass,
@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                               MaterialPageRoute(
                                 builder: (context) {
                                   return BlocProvider(
-                                    create: (context) => _loginBloc!,
+                                    create: (context) => getIt<LoginBloc>(),
                                     child: const ForgotPassword(),
                                   );
                                 },

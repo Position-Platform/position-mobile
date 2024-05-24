@@ -24,21 +24,22 @@ class _PositionErrorWidgetState extends State<PositionErrorWidget> {
         children: <Widget>[
           Image.asset(
             "assets/images/png/ghostf.png",
-            height: 200,
-            width: 200,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            widget.message,
-            style: const TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
+            height: 150,
+            width: 150,
           ),
           const SizedBox(
             height: 20,
+          ),
+          Text(
+            widget.message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                fontFamily: "OpenSans"),
+          ),
+          const SizedBox(
+            height: 40,
           ),
           TextButton(
               style: ButtonStyle(

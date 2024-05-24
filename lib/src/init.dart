@@ -65,6 +65,14 @@ class InitPage extends StatelessWidget {
               onPressed: () =>
                   BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
         }
+
+        // Si l'état est AuthMaintenance, afficher un message d'erreur indiquant que l'application est en cours de maintenance
+        if (state is AuthMaintenance) {
+          return PositionErrorWidget(
+              message: PositionLocalizations.of(context).maintenance,
+              onPressed: () =>
+                  BlocProvider.of<AuthBloc>(context).add(AuthStarted()));
+        }
         // Par défaut, afficher l'écran de chargement
         return const SplashScreen();
       },

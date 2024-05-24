@@ -43,7 +43,29 @@ class _ResetPasswordState extends State<ResetPassword> {
     super.dispose();
   }
 
+  bool get isPopulated =>
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _cpasswordController.text.isNotEmpty;
+
   void _onResetPasswordSubmitted() {
+    if (!isPopulated) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(PositionLocalizations.of(context).error),
+                const Icon(Icons.error)
+              ],
+            ),
+            backgroundColor: redColor,
+          ),
+        );
+      return;
+    }
     _loginBloc!.add(
       PasswordReset(
           email: _emailController.text,
@@ -74,7 +96,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       ],
                     ),
                     backgroundColor: primaryColor,
-                    duration: const Duration(seconds: 5),
+                    duration: const Duration(seconds: 2),
                   ),
                 );
             }
@@ -102,7 +124,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     content: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(PositionLocalizations.of(context).loggin),
+                        Text(PositionLocalizations.of(context).loading),
                         const CircularProgressIndicator(),
                       ],
                     ),
