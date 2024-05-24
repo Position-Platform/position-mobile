@@ -210,6 +210,396 @@ class PositionLocalizations {
       args: [],
     );
   }
+
+  /// `Entrez votre identifiant ou votre email`
+  String get hintIdText {
+    return Intl.message(
+      'Entrez votre identifiant ou votre email',
+      name: 'hintIdText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Identifiant/Email`
+  String get labelIdText {
+    return Intl.message(
+      'Identifiant/Email',
+      name: 'labelIdText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Entrez votre mot de passe`
+  String get hintPasswordText {
+    return Intl.message(
+      'Entrez votre mot de passe',
+      name: 'hintPasswordText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mot de passe`
+  String get labelPasswordText {
+    return Intl.message(
+      'Mot de passe',
+      name: 'labelPasswordText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Echec de Connexion`
+  String get loginFailed {
+    return Intl.message(
+      'Echec de Connexion',
+      name: 'loginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connexion...`
+  String get loggin {
+    return Intl.message(
+      'Connexion...',
+      name: 'loggin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Un mail de reinitialisation vous a été envoyé`
+  String get emailSend {
+    return Intl.message(
+      'Un mail de reinitialisation vous a été envoyé',
+      name: 'emailSend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Erreur de mail. Reessayez!!!`
+  String get emailNoSend {
+    return Intl.message(
+      'Erreur de mail. Reessayez!!!',
+      name: 'emailNoSend',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connexion reussie`
+  String get loginSuccess {
+    return Intl.message(
+      'Connexion reussie',
+      name: 'loginSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email Invalide`
+  String get invalidMail {
+    return Intl.message(
+      'Email Invalide',
+      name: 'invalidMail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Téléphone Invalide`
+  String get invalidPhone {
+    return Intl.message(
+      'Téléphone Invalide',
+      name: 'invalidPhone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mot de Passe Invalide`
+  String get invalidPass {
+    return Intl.message(
+      'Mot de Passe Invalide',
+      name: 'invalidPass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mot de Passe oublié ?`
+  String get forgotPass {
+    return Intl.message(
+      'Mot de Passe oublié ?',
+      name: 'forgotPass',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connexion`
+  String get connexion {
+    return Intl.message(
+      'Connexion',
+      name: 'connexion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pas encore de Compte?  `
+  String get noAccount {
+    return Intl.message(
+      'Pas encore de Compte?  ',
+      name: 'noAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mot de Passe`
+  String get password {
+    return Intl.message(
+      'Mot de Passe',
+      name: 'password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Création du compte...`
+  String get registering {
+    return Intl.message(
+      'Création du compte...',
+      name: 'registering',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Création du compte reussie verifiez vos mails...`
+  String get registerSuccess {
+    return Intl.message(
+      'Création du compte reussie verifiez vos mails...',
+      name: 'registerSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Echec de création de compte`
+  String get registerFailed {
+    return Intl.message(
+      'Echec de création de compte',
+      name: 'registerFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Creer un compte`
+  String get createAccount {
+    return Intl.message(
+      'Creer un compte',
+      name: 'createAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nom d'utilisateur`
+  String get username {
+    return Intl.message(
+      'Nom d\'utilisateur',
+      name: 'username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mots de passes differents`
+  String get passError {
+    return Intl.message(
+      'Mots de passes differents',
+      name: 'passError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmer le Mot de Passe`
+  String get cpassword {
+    return Intl.message(
+      'Confirmer le Mot de Passe',
+      name: 'cpassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `J'ai déja un compte`
+  String get alreadyAccount {
+    return Intl.message(
+      'J\'ai déja un compte',
+      name: 'alreadyAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CONNECTEZ VOUS`
+  String get login {
+    return Intl.message(
+      'CONNECTEZ VOUS',
+      name: 'login',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Adresse Mail`
+  String get email {
+    return Intl.message(
+      'Adresse Mail',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remplissez l'adresse mail`
+  String get addEmail {
+    return Intl.message(
+      'Remplissez l\'adresse mail',
+      name: 'addEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Numéro de Téléphone`
+  String get phone {
+    return Intl.message(
+      'Numéro de Téléphone',
+      name: 'phone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Envoyer un lien de reinitialisation`
+  String get sendResetLink {
+    return Intl.message(
+      'Envoyer un lien de reinitialisation',
+      name: 'sendResetLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reinitialiser le Mot de Passe`
+  String get resetPassword {
+    return Intl.message(
+      'Reinitialiser le Mot de Passe',
+      name: 'resetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Téléphone ou Email Invalide`
+  String get invalidId {
+    return Intl.message(
+      'Téléphone ou Email Invalide',
+      name: 'invalidId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `- OU -`
+  String get or {
+    return Intl.message(
+      '- OU -',
+      name: 'or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Se Connecter avec`
+  String get signwith {
+    return Intl.message(
+      'Se Connecter avec',
+      name: 'signwith',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `S'INSCRIRE`
+  String get register {
+    return Intl.message(
+      'S\'INSCRIRE',
+      name: 'register',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmer le Mot de Passe`
+  String get confirmPassword {
+    return Intl.message(
+      'Confirmer le Mot de Passe',
+      name: 'confirmPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Une erreur est survenue`
+  String get error {
+    return Intl.message(
+      'Une erreur est survenue',
+      name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `reinitialisation effectuée`
+  String get resetsuccess {
+    return Intl.message(
+      'reinitialisation effectuée',
+      name: 'resetsuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chargement...`
+  String get loading {
+    return Intl.message(
+      'Chargement...',
+      name: 'loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Votre application est en cours de maintenance. Reessayez plus tard`
+  String get maintenance {
+    return Intl.message(
+      'Votre application est en cours de maintenance. Reessayez plus tard',
+      name: 'maintenance',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate

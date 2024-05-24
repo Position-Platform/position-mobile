@@ -91,16 +91,21 @@ class LoginWithFacebookPressed extends LoginEvent {}
 // Événement de connexion avec Google
 class LoginWithGooglePressed extends LoginEvent {}
 
+// Événement de connexion avec Apple
+class LoginWithApplePressed extends LoginEvent {}
+
 // Afficher ou masquer le mot de passe
 class LoginPasswordVisibility extends LoginEvent {
   final bool? passwordVisibility;
+  final bool? cpasswordVisibility;
 
-  const LoginPasswordVisibility({@required this.passwordVisibility});
+  const LoginPasswordVisibility(
+      {@required this.passwordVisibility, @required this.cpasswordVisibility});
 
   @override
-  List<Object> get props => [passwordVisibility!];
+  List<Object> get props => [passwordVisibility!, cpasswordVisibility!];
 
   @override
   String toString() =>
-      'LoginPasswordVisibility { passwordVisibility: $passwordVisibility }';
+      'LoginPasswordVisibility { passwordVisibility: $passwordVisibility , cpasswordVisibility: $cpasswordVisibility}';
 }

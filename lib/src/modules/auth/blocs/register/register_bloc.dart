@@ -28,6 +28,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<RegisterPhoneChanged>(_registerPhoneChanged,
         transformer: debounce(const Duration(milliseconds: 300)));
     on<RegisterSubmitted>(_registerButtonPressed);
+    on<RegisterPasswordVisibility>(_togglePasswordVisibility);
   }
 
   // RxDart pour gerer les evenements de facon asynchrone
@@ -94,5 +95,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } catch (error) {
       return emit(RegisterState.failure());
     }
+  }
+
+  void _togglePasswordVisibility(
+    RegisterPasswordVisibility event,
+    Emitter<RegisterState> emit,
+  ) async {
+    emit(state.update(
+        isPasswordVisible: !state.isPasswordVisible!,
+        isCPasswordVisible: !state.isCPasswordVisible!));
   }
 }

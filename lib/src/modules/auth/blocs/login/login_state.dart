@@ -11,6 +11,7 @@ class LoginState extends Equatable {
   final bool? isResetPassword;
   final bool? isFailedResetPassword;
   final bool? isPasswordVisible;
+  final bool? isCPasswordVisible;
 
   bool get isFormValid => isIdValid! && isPasswordValid!;
 
@@ -24,7 +25,8 @@ class LoginState extends Equatable {
       @required this.isFailSend,
       @required this.isResetPassword,
       @required this.isFailedResetPassword,
-      this.isPasswordVisible});
+      this.isPasswordVisible,
+      this.isCPasswordVisible});
 
   factory LoginState.initial() {
     return const LoginState(
@@ -37,7 +39,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.send() {
@@ -51,7 +54,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.failSend() {
@@ -65,7 +69,8 @@ class LoginState extends Equatable {
         isFailSend: true,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.loading() {
@@ -79,7 +84,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.failure() {
@@ -93,7 +99,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.success() {
@@ -107,7 +114,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.resetPassword() {
@@ -121,7 +129,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: true,
         isFailedResetPassword: false,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.failedresetPassword() {
@@ -135,7 +144,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: true,
-        isPasswordVisible: false);
+        isPasswordVisible: false,
+        isCPasswordVisible: false);
   }
 
   factory LoginState.passwordVisible() {
@@ -149,13 +159,30 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: true);
+        isPasswordVisible: true,
+        isCPasswordVisible: false);
+  }
+
+  factory LoginState.cpasswordVisible() {
+    return const LoginState(
+        isIdValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: false,
+        isSend: false,
+        isFailSend: false,
+        isResetPassword: false,
+        isFailedResetPassword: false,
+        isPasswordVisible: false,
+        isCPasswordVisible: true);
   }
 
   LoginState update({
     bool? isIdValid,
     bool? isPasswordValid,
     bool? isPasswordVisible,
+    bool? isCPasswordVisible,
   }) {
     return copyWith(
         isIdValid: isIdValid,
@@ -167,7 +194,8 @@ class LoginState extends Equatable {
         isFailSend: false,
         isResetPassword: false,
         isFailedResetPassword: false,
-        isPasswordVisible: isPasswordVisible);
+        isPasswordVisible: isPasswordVisible,
+        isCPasswordVisible: isCPasswordVisible);
   }
 
   LoginState copyWith(
@@ -181,7 +209,8 @@ class LoginState extends Equatable {
       bool? isFailSend,
       bool? isResetPassword,
       bool? isFailedResetPassword,
-      bool? isPasswordVisible}) {
+      bool? isPasswordVisible,
+      bool? isCPasswordVisible}) {
     return LoginState(
         isIdValid: isIdValid ?? this.isIdValid,
         isPasswordValid: isPasswordValid ?? this.isPasswordValid,
@@ -192,7 +221,8 @@ class LoginState extends Equatable {
         isFailSend: isFailSend ?? this.isFailSend,
         isResetPassword: isResetPassword ?? this.isResetPassword,
         isFailedResetPassword: isFailedResetPassword ?? isFailedResetPassword,
-        isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible);
+        isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
+        isCPasswordVisible: isCPasswordVisible ?? this.isCPasswordVisible);
   }
 
   @override
@@ -207,7 +237,8 @@ class LoginState extends Equatable {
       isFailSend: $isFailSend,
       isResetPassword : $isResetPassword,
       isFailedResetPassword:$isFailedResetPassword,
-      isPasswordVisible:$isPasswordVisible
+      isPasswordVisible:$isPasswordVisible,
+      isCPasswordVisible:$isCPasswordVisible
     }''';
   }
 
@@ -222,6 +253,7 @@ class LoginState extends Equatable {
         isSend!,
         isResetPassword!,
         isFailedResetPassword!,
-        isPasswordVisible!
+        isPasswordVisible!,
+        isCPasswordVisible!
       ];
 }

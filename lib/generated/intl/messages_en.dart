@@ -22,18 +22,75 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "addEmail":
+            MessageLookupByLibrary.simpleMessage("Fill in the email address"),
+        "alreadyAccount":
+            MessageLookupByLibrary.simpleMessage("I already have an account"),
         "appname": MessageLookupByLibrary.simpleMessage("Position"),
         "askAccess": MessageLookupByLibrary.simpleMessage("Request access"),
+        "confirmPassword":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
+        "connexion": MessageLookupByLibrary.simpleMessage("Login"),
+        "cpassword": MessageLookupByLibrary.simpleMessage("Confirm Password"),
+        "createAccount":
+            MessageLookupByLibrary.simpleMessage("Create an account"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "emailNoSend":
+            MessageLookupByLibrary.simpleMessage("Email error. Try again!!!"),
+        "emailSend": MessageLookupByLibrary.simpleMessage(
+            "A reset email has been sent to you"),
         "enableGps":
             MessageLookupByLibrary.simpleMessage("Make sure you activate GPS."),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
+        "forgotPass":
+            MessageLookupByLibrary.simpleMessage("Forgot your password?"),
         "go": MessageLookupByLibrary.simpleMessage("Go ahead"),
         "gpsAccess":
             MessageLookupByLibrary.simpleMessage("GPS access is required"),
+        "hintIdText": MessageLookupByLibrary.simpleMessage(
+            "Enter your email address or username"),
+        "hintPasswordText":
+            MessageLookupByLibrary.simpleMessage("Enter your password"),
+        "invalidId":
+            MessageLookupByLibrary.simpleMessage("Phone or Email Invalid"),
+        "invalidMail": MessageLookupByLibrary.simpleMessage("Invalid Email"),
+        "invalidPass": MessageLookupByLibrary.simpleMessage("Invalid Password"),
+        "invalidPhone": MessageLookupByLibrary.simpleMessage("Invalid Phone"),
+        "labelIdText":
+            MessageLookupByLibrary.simpleMessage("Email or username"),
+        "labelPasswordText": MessageLookupByLibrary.simpleMessage("Password"),
+        "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "loggin": MessageLookupByLibrary.simpleMessage("Connection..."),
+        "login": MessageLookupByLibrary.simpleMessage("LOGIN"),
+        "loginFailed": MessageLookupByLibrary.simpleMessage("Login Failed"),
+        "loginSuccess":
+            MessageLookupByLibrary.simpleMessage("Login successful"),
+        "maintenance": MessageLookupByLibrary.simpleMessage(
+            "Your application is being maintained. Try again later"),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "noAccount": MessageLookupByLibrary.simpleMessage("No Account yet?  "),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("No internet connection"),
+        "or": MessageLookupByLibrary.simpleMessage("- OR -"),
+        "passError":
+            MessageLookupByLibrary.simpleMessage("Different passwords"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "phone": MessageLookupByLibrary.simpleMessage("Phone Number"),
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "registerFailed":
+            MessageLookupByLibrary.simpleMessage("Account creation failed"),
+        "registerSuccess": MessageLookupByLibrary.simpleMessage(
+            "Successful account creation check your emails..."),
+        "registering":
+            MessageLookupByLibrary.simpleMessage("Account creation..."),
+        "resetPassword": MessageLookupByLibrary.simpleMessage("Reset Password"),
+        "resetsuccess":
+            MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "sendResetLink":
+            MessageLookupByLibrary.simpleMessage("Send a reset link"),
         "serverError":
             MessageLookupByLibrary.simpleMessage("An error has occurred"),
+        "signwith": MessageLookupByLibrary.simpleMessage("Sign in with"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "subtitle1": MessageLookupByLibrary.simpleMessage(
             "Print official location map, share, save to favorites or navigate from one place to another On-call pharmacy, bank, health center, schools, social infrastructure and public services"),
@@ -47,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Showcase your skills, products and services online"),
         "title3": MessageLookupByLibrary.simpleMessage(
             "Find practical information and consult the calendar of events"),
-        "tryAgain": MessageLookupByLibrary.simpleMessage("Try again")
+        "tryAgain": MessageLookupByLibrary.simpleMessage("Try again"),
+        "username": MessageLookupByLibrary.simpleMessage("User name")
       };
 }

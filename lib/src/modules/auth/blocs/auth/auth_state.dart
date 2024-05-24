@@ -50,3 +50,6 @@ class AuthNoInternet extends AuthState {}
 
 //Server Error
 class AuthServerError extends AuthState {}
+
+// Maintenance en cours
+class AuthMaintenance extends AuthState {}

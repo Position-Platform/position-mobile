@@ -15,6 +15,8 @@ abstract class AuthApiService {
 
   Future<Response> registergoogle(String token);
 
+  Future<Response> registerapple(String token);
+
   Future<Response> getuser(String token);
 
   Future<Response> forgotpassword(String email);

@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:position/src/core/helpers/sharedpreferences.dart';
 import 'package:position/src/core/utils/result.dart';
 import 'package:position/src/core/utils/validators.dart';
 import 'package:position/src/modules/auth/models/auth_model/auth_model.dart';
 import 'package:position/src/modules/auth/repositories/auth/authRepository.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -26,6 +28,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<PasswordForgot>(_forgotButtonPressed);
     on<PasswordReset>(_resetButtonPressed);
     on<LoginPasswordVisibility>(_togglePasswordVisibility);
+    on<LoginWithGooglePressed>(_googleButtonPressed);
+    on<LoginWithApplePressed>(_appleButtonPressed);
   }
 
   // RxDart pour gerer les evenements de facon asynchrone
@@ -110,6 +114,66 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     LoginPasswordVisibility event,
     Emitter<LoginState> emit,
   ) async {
-    emit(state.update(isPasswordVisible: !state.isPasswordVisible!));
+    emit(state.update(
+        isPasswordVisible: !state.isPasswordVisible!,
+        isCPasswordVisible: !state.isCPasswordVisible!));
+  }
+
+  void _googleButtonPressed(
+    LoginWithGooglePressed event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(LoginState.loading());
+    try {
+      var googleLogin = GoogleSignIn(
+        scopes: ['email'],
+      );
+
+      final result = await googleLogin.signIn();
+
+      if (result != null) {
+        final authentication = await result.authentication;
+
+        Result<AuthModel> auth =
+            await authRepository!.registergoogle(authentication.accessToken!);
+        if (auth.success!.success!) {
+          await sharedPreferencesHelper!.setToken(auth.success!.data!.token!);
+          emit(LoginState.success());
+        } else {
+          emit(LoginState.failure());
+        }
+      } else {
+        emit(LoginState.failure());
+      }
+    } catch (e) {
+      emit(LoginState.failure());
+    }
+  }
+
+  void _appleButtonPressed(
+    LoginWithApplePressed event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(LoginState.loading());
+    try {
+      var appleSigning = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final result = appleSigning.authorizationCode;
+
+      Result<AuthModel> auth = await authRepository!.registerapple(result);
+      if (auth.success!.success!) {
+        await sharedPreferencesHelper!.setToken(auth.success!.data!.token!);
+        emit(LoginState.success());
+      } else {
+        emit(LoginState.failure());
+      }
+    } catch (e) {
+      emit(LoginState.failure());
+    }
   }
 }
