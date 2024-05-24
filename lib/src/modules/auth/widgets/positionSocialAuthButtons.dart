@@ -1,11 +1,16 @@
 // ignore_for_file: file_names
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
 
 class PositionSocialAuthButtons extends StatefulWidget {
-  const PositionSocialAuthButtons({super.key, required this.setting});
+  const PositionSocialAuthButtons(
+      {super.key, required this.setting, required this.loginBloc});
   final Setting setting;
+  final LoginBloc loginBloc;
 
   @override
   State<PositionSocialAuthButtons> createState() =>
@@ -18,11 +23,21 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        widget.setting.isGoogleLoginEnabled!
+        Platform.isAndroid && widget.setting.isGoogleLoginEnabled!
             ? _buildLogoButton(
                 image: 'assets/images/png/google_logo.png',
-                onPressed: () {},
+                onPressed: () {
+                  widget.loginBloc.add(LoginWithGooglePressed());
+                },
                 tag: "google")
+            : const SizedBox(),
+        Platform.isIOS && widget.setting.isAppleLoginEnabled!
+            ? _buildLogoButton(
+                image: 'assets/images/png/apple.png',
+                onPressed: () {
+                  widget.loginBloc.add(LoginWithApplePressed());
+                },
+                tag: "apple")
             : const SizedBox(),
         const SizedBox(
           width: 20,

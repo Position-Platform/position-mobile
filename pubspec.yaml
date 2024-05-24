@@ -29,6 +29,7 @@ dependencies:
   fluttertoast: ^8.2.5
   geolocator: ^11.0.0
   get_it: ^7.7.0
+  google_sign_in: ^6.2.1
   hydrated_bloc: ^9.1.5
   intl: ^0.18.1
   intl_utils: ^2.8.7
@@ -39,6 +40,7 @@ dependencies:
   permission_handler: ^11.3.1
   rxdart: ^0.27.7
   shared_preferences: ^2.2.3
+  sign_in_with_apple: ^6.1.0
   sqlite3: ^2.4.3
   sqlite3_flutter_libs: ^0.5.21
 dev_dependencies:

@@ -223,4 +223,25 @@ class AuthRepositoryImpl implements AuthRepository {
       return Result(error: NoInternetError());
     }
   }
+
+  @override
+  Future<Result<AuthModel>> registerapple(String token) async {
+    bool isConnected = await networkInfoHelper!.isConnected();
+    if (isConnected) {
+      try {
+        final Response response = await authApiService!.registerapple(token);
+
+        var model = AuthModel.fromJson(response.body);
+
+        await userDao!.addUser(UserTableCompanion(
+            id: const Value(1), user: Value(model.data!.user)));
+
+        return Result(success: model);
+      } catch (e) {
+        return Result(error: ServerError());
+      }
+    } else {
+      return Result(error: NoInternetError());
+    }
+  }
 }

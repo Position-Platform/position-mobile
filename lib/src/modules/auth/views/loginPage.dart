@@ -305,6 +305,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         PositionSocialAuthButtons(
                           setting: widget.setting,
+                          loginBloc: _loginBloc!,
                         ),
                         const SizedBox(
                           height: 80,

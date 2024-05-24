@@ -91,6 +91,9 @@ class LoginWithFacebookPressed extends LoginEvent {}
 // Événement de connexion avec Google
 class LoginWithGooglePressed extends LoginEvent {}
 
+// Événement de connexion avec Apple
+class LoginWithApplePressed extends LoginEvent {}
+
 // Afficher ou masquer le mot de passe
 class LoginPasswordVisibility extends LoginEvent {
   final bool? passwordVisibility;

@@ -30,6 +30,10 @@ abstract class ApiService extends ChopperService {
       headers: {'Accept': 'application/json'})
   Future<Response> registergoogle(@Body() Map<String, dynamic> body);
 
+  @Post(
+      path: '/api/auth/register/apple', headers: {'Accept': 'application/json'})
+  Future<Response> registerapple(@Body() Map<String, dynamic> body);
+
   @Get(path: '/api/user/me', headers: {'Accept': 'application/json'})
   Future<Response> getuser(
     @Header('Authorization') String token,
