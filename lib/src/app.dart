@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:position/generated/l10n.dart';
+import 'package:position/src/core/di/di.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/gps/views/loading.dart';
+import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 
 class MyApp extends StatelessWidget {
   // Le constructeur prend un paramètre initialLink et appelle le constructeur de la classe parent avec la clé et le paramètre initialLink.
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
           // Le bloc AppBloc est fourni à l'ensemble de l'application.
           BlocProvider(
             create: (context) => AppBloc(),
+          ),
+          BlocProvider<MapBloc>(
+            create: (context) => getIt<MapBloc>(),
           ),
         ],
         child: BlocBuilder<AppBloc, AppState>(

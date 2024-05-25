@@ -20,6 +20,7 @@ import 'package:position/src/modules/auth/db/user/user.dao.dart';
 import 'package:position/src/modules/auth/repositories/auth/authRepository.dart';
 import 'package:position/src/modules/auth/repositories/auth/authRepositoryImpl.dart';
 import 'package:position/src/modules/gps/bloc/gps_bloc.dart';
+import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -85,4 +86,5 @@ Future<void> init() async {
       LoginBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
   getIt.registerFactory<RegisterBloc>(() =>
       RegisterBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
+  getIt.registerFactory<MapBloc>(() => MapBloc());
 }

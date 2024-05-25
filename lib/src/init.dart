@@ -9,6 +9,7 @@ import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/auth/blocs/auth/auth_bloc.dart';
 import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
 import 'package:position/src/modules/auth/views/loginPage.dart';
+import 'package:position/src/modules/map/views/mapPage.dart';
 import 'package:position/src/onboarding.dart';
 import 'package:position/src/splash.dart';
 import 'package:position/src/widgets/positionErrorWidget.dart';
@@ -42,14 +43,7 @@ class InitPage extends StatelessWidget {
         }
         // Si l'état est AuthSuccess, afficher la carte avec la position de l'utilisateur
         if (state is AuthSuccess) {
-          return Scaffold(
-            body: Center(
-              child: Text(
-                state.settings.appName!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          );
+          return MapPage(setting: state.settings);
         }
         // Si l'état est AuthNoInternet, afficher un message d'erreur indiquant que l'application n'a pas accès à Internet
         if (state is AuthNoInternet) {
