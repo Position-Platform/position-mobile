@@ -8,7 +8,7 @@ sealed class MapEvent extends Equatable {
 }
 
 class OnMapInitializedEvent extends MapEvent {
-  final MaplibreMapController controller;
+  final mapbox.MapboxMap controller;
   final Setting? setting;
 
   const OnMapInitializedEvent(this.controller, this.setting);

@@ -1,10 +1,9 @@
 // ignore_for_file: file_names
 
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:maplibre_gl/maplibre_gl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:position/src/core/utils/colors.dart';
 import 'package:position/src/core/utils/configs.dart';
 import 'package:position/src/core/utils/tools.dart';
@@ -32,37 +31,62 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     changeStatusColor(transparent);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: BlocListener<MapBloc, MapState>(
-          listener: (context, state) {
-            if (state is MapInitialized) {}
+      resizeToAvoidBottomInset: false,
+      body: BlocListener<MapBloc, MapState>(
+        listener: (context, state) {
+          if (state is MapInitialized) {
+            _mapBloc?.add(GetUserLocationEvent());
+          }
+        },
+        child: BlocBuilder<MapBloc, MapState>(
+          builder: (context, state) {
+            MapboxOptions.setAccessToken(mapboxKey!);
+            return MapWidget(
+              key: const ValueKey("mapWidget"),
+              cameraOptions: CameraOptions(
+                center: Point(
+                    coordinates: Position(
+                  0,
+                  0,
+                )).toJson(),
+              ),
+              styleUri: MapboxStyles.MAPBOX_STREETS,
+              textureView: true,
+              onMapCreated: (controller) => _mapBloc
+                  ?.add(OnMapInitializedEvent(controller, widget.setting)),
+              onStyleLoadedListener: (styleLoadedEventData) {},
+              onLongTapListener: (coordinate) {},
+              onTapListener: (coordinate) {},
+            );
           },
-          child: BlocBuilder<MapBloc, MapState>(
-            builder: (context, state) {
-              return MaplibreMap(
-                attributionButtonPosition: AttributionButtonPosition.BottomLeft,
-                attributionButtonMargins: const Point(-100, -100),
-                rotateGesturesEnabled: false,
-                annotationOrder: const [AnnotationType.symbol],
-                compassViewPosition: CompassViewPosition.BottomLeft,
-                zoomGesturesEnabled: true,
-                myLocationEnabled: true,
-                myLocationTrackingMode: MyLocationTrackingMode.Tracking,
-                myLocationRenderMode: MyLocationRenderMode.GPS,
-                compassEnabled: true,
-                onMapClick: (point, coordinates) => () {},
-                styleString:
-                    "${widget.setting.defaultMapStyle}?key=${widget.setting.mapApiKey}",
-                onMapLongClick: (point, latLng) => () {},
-                onMapCreated: (controller) => _mapBloc
-                    ?.add(OnMapInitializedEvent(controller, widget.setting)),
-                doubleClickZoomEnabled: true,
-                initialCameraPosition: const CameraPosition(
-                    zoom: initialMapZoom, target: LatLng(0, 0)),
-                onStyleLoadedCallback: () {},
-              );
-            },
-          ),
-        ));
+        ),
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: Wrap(
+          direction: Axis.vertical,
+          children: [
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  shape: const CircleBorder(),
+                  heroTag: "location",
+                  tooltip: "Location",
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  onPressed: () {
+                    _mapBloc?.add(GetUserLocationEvent());
+                  },
+                  child: SvgPicture.asset(
+                    "assets/images/svg/icon-my_location.svg",
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
