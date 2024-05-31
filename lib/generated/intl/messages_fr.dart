@@ -94,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Reinitialiser le Mot de Passe"),
         "resetsuccess":
             MessageLookupByLibrary.simpleMessage("reinitialisation effectuée"),
+        "search": MessageLookupByLibrary.simpleMessage(
+            "Rechercher un établissement, un lieu..."),
         "sendResetLink": MessageLookupByLibrary.simpleMessage(
             "Envoyer un lien de reinitialisation"),
         "serverError":

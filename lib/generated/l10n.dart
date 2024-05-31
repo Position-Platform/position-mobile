@@ -600,6 +600,16 @@ class PositionLocalizations {
       args: [],
     );
   }
+
+  /// `Rechercher un établissement, un lieu...`
+  String get search {
+    return Intl.message(
+      'Rechercher un établissement, un lieu...',
+      name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate

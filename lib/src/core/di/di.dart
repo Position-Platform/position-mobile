@@ -19,6 +19,12 @@ import 'package:position/src/modules/auth/blocs/auth/auth_bloc.dart';
 import 'package:position/src/modules/auth/db/user/user.dao.dart';
 import 'package:position/src/modules/auth/repositories/auth/authRepository.dart';
 import 'package:position/src/modules/auth/repositories/auth/authRepositoryImpl.dart';
+import 'package:position/src/modules/categories/api/categoriesApiService.dart';
+import 'package:position/src/modules/categories/api/categoriesApiServiceFactory.dart';
+import 'package:position/src/modules/categories/bloc/categories/categories_bloc.dart';
+import 'package:position/src/modules/categories/db/category.dao.dart';
+import 'package:position/src/modules/categories/repositories/categoriesRepository.dart';
+import 'package:position/src/modules/categories/repositories/categoriesRepositoryImpl.dart';
 import 'package:position/src/modules/gps/bloc/gps_bloc.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 
@@ -43,6 +49,8 @@ Future<void> init() async {
       () => SettingApiServiceFactory(apiService));
   getIt.registerLazySingleton<AuthApiService>(
       () => AuthApiServiceFactory(apiService));
+  getIt.registerLazySingleton<CategoriesApiService>(
+      () => CategoriesApiServiceFactory(apiService));
 
   //Utils
   // Enregistrement des instances des différents helpers
@@ -55,6 +63,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<MyDatabase>(() => MyDatabase());
   getIt.registerLazySingleton<SettingDao>(() => SettingDao(getIt()));
   getIt.registerLazySingleton<UserDao>(() => UserDao(getIt()));
+  getIt.registerLazySingleton<CategoryDao>(() => CategoryDao(getIt()));
 
   //Repository
   // Enregistrement des instances des différents repositories
@@ -74,6 +83,14 @@ Future<void> init() async {
         userDao: getIt()),
   );
 
+  getIt.registerFactory<CategoriesRepository>(
+    () => CategoriesRepositoryImpl(
+        categoriesApiService: getIt(),
+        networkInfoHelper: getIt(),
+        sharedPreferencesHelper: getIt(),
+        categoryDao: getIt()),
+  );
+
   //Bloc
   // Enregistrement des instances des différents blocs
   getIt.registerFactory<AppBloc>(() => AppBloc());
@@ -87,4 +104,6 @@ Future<void> init() async {
   getIt.registerFactory<RegisterBloc>(() =>
       RegisterBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
   getIt.registerFactory<MapBloc>(() => MapBloc());
+  getIt.registerFactory<CategoriesBloc>(
+      () => CategoriesBloc(categoriesRepository: getIt()));
 }

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:position/generated/l10n.dart';
 import 'package:position/src/core/di/di.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
+import 'package:position/src/modules/categories/bloc/categories/categories_bloc.dart';
 import 'package:position/src/modules/gps/views/loading.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider<MapBloc>(
             create: (context) => getIt<MapBloc>(),
+          ),
+          BlocProvider<CategoriesBloc>(
+            create: (context) => getIt<CategoriesBloc>(),
           ),
         ],
         child: BlocBuilder<AppBloc, AppState>(

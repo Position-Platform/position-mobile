@@ -86,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "resetPassword": MessageLookupByLibrary.simpleMessage("Reset Password"),
         "resetsuccess":
             MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "search": MessageLookupByLibrary.simpleMessage(
+            "Search for an establishment, a place..."),
         "sendResetLink":
             MessageLookupByLibrary.simpleMessage("Send a reset link"),
         "serverError":
