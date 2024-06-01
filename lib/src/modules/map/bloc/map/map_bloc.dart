@@ -16,6 +16,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   MapBloc() : super(MapInitial()) {
     on<OnMapInitializedEvent>(_onInitMap);
     on<GetUserLocationEvent>(_getUserLocation);
+    on<UserStyleSelectionEvent>(_userStyleSelection);
   }
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
@@ -40,12 +41,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _getUserLocation(
       GetUserLocationEvent event, Emitter<MapState> emit) async {
-    Position position = await Geolocator.getCurrentPosition();
+    Position? position = await Geolocator.getLastKnownPosition();
     _mapController?.flyTo(
         mapbox.CameraOptions(
             center: mapbox.Point(
                 coordinates: mapbox.Position(
-              position.longitude,
+              position!.longitude,
               position.latitude,
             )).toJson(),
             anchor: mapbox.ScreenCoordinate(
@@ -53,7 +54,15 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             zoom: initialMapZoom,
             bearing: 180,
             pitch: 30),
-        mapbox.MapAnimationOptions(duration: 2000, startDelay: 0));
+        mapbox.MapAnimationOptions(duration: 1000, startDelay: 0));
     emit(MapGetUserLocation());
+  }
+
+  void _userStyleSelection(
+      UserStyleSelectionEvent event, Emitter<MapState> emit) {
+    _mapController?.loadStyleURI(event.style);
+    emit(MapStyleSelected(
+      event.style,
+    ));
   }
 }

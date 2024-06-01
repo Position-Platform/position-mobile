@@ -8,6 +8,3 @@ String? apiKey = dotenv.env['API_KEY'];
 
 // Zoom initial pour la carte
 const double initialMapZoom = 15.0;
-
-// Mapbox public key
-String? mapboxKey = dotenv.env['MAPBOX_ACCESS_TOKEN'];

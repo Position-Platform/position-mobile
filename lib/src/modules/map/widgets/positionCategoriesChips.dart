@@ -5,11 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:position/src/core/utils/colors.dart';
 
 class PositionCategorieChips extends StatefulWidget {
-  const PositionCategorieChips(
-      {super.key,
-      required this.callback,
-      required this.label,
-      required this.icon});
+  const PositionCategorieChips({
+    super.key,
+    required this.callback,
+    required this.label,
+    required this.icon,
+  });
   final VoidCallback callback;
   final String label;
   final String icon;
@@ -26,9 +27,9 @@ class _PositionCategorieChipsState extends State<PositionCategorieChips> {
       highlightColor: transparent,
       child: Chip(
         labelPadding: const EdgeInsets.all(1.0),
-        shape: const StadiumBorder(
+        shape: StadiumBorder(
             side: BorderSide(
-          color: grey2,
+          color: Theme.of(context).colorScheme.background,
         )),
         avatar: CircleAvatar(
           backgroundColor: transparent,
@@ -41,10 +42,10 @@ class _PositionCategorieChipsState extends State<PositionCategorieChips> {
         label: Text(
           widget.label,
           style: const TextStyle(
-              color: Colors.black, fontFamily: "OpenSans-Bold", fontSize: 11),
+              color: blackColor, fontFamily: "OpenSans-Bold", fontSize: 11),
         ),
-        backgroundColor: whiteColor,
-        elevation: 0.0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        elevation: 10.0,
         shadowColor: transparent,
         padding: const EdgeInsets.all(6.0),
       ),

@@ -15,3 +15,9 @@ class OnMapInitializedEvent extends MapEvent {
 }
 
 class GetUserLocationEvent extends MapEvent {}
+
+class UserStyleSelectionEvent extends MapEvent {
+  final String style;
+
+  const UserStyleSelectionEvent(this.style);
+}

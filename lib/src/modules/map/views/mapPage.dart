@@ -6,14 +6,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:position/generated/l10n.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/core/utils/configs.dart';
+import 'package:position/src/core/utils/themes.dart';
 import 'package:position/src/core/utils/tools.dart';
+import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
 import 'package:position/src/modules/categories/bloc/categories/categories_bloc.dart';
 import 'package:position/src/modules/categories/models/categories_model/category.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 import 'package:position/src/modules/map/widgets/positionCategoriesWidget.dart';
 import 'package:position/src/modules/map/widgets/positionSearchBar.dart';
+import 'package:position/src/modules/map/widgets/positionStyleSelection.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key, required this.setting});
@@ -25,6 +27,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapBloc? _mapBloc;
+  AppBloc? _appBloc;
   CategoriesBloc? _categoriesBloc;
   List<Category> categories = [];
 
@@ -33,6 +36,7 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     _mapBloc = BlocProvider.of<MapBloc>(context);
     _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
+    _appBloc = BlocProvider.of<AppBloc>(context);
     _categoriesBloc?.add(GetCategories());
   }
 
@@ -48,6 +52,13 @@ class _MapPageState extends State<MapPage> {
               if (state is MapInitialized) {
                 _mapBloc?.add(GetUserLocationEvent());
               }
+              if (state is MapStyleSelected) {
+                if (state.style == MapboxStyles.DARK) {
+                  _appBloc!.add(const ChangeTheme(AppTheme.darkTheme));
+                } else {
+                  _appBloc!.add(const ChangeTheme(AppTheme.lightTheme));
+                }
+              }
             },
           ),
           BlocListener<CategoriesBloc, CategoriesState>(
@@ -61,42 +72,50 @@ class _MapPageState extends State<MapPage> {
         ],
         child: BlocBuilder<MapBloc, MapState>(
           builder: (context, state) {
-            MapboxOptions.setAccessToken(mapboxKey!);
-            return Stack(
-              children: [
-                MapWidget(
-                  key: const ValueKey("mapWidget"),
-                  cameraOptions: CameraOptions(
-                    center: Point(
-                        coordinates: Position(
-                      0,
-                      0,
-                    )).toJson(),
-                  ),
-                  styleUri: MapboxStyles.MAPBOX_STREETS,
-                  textureView: true,
-                  onMapCreated: (controller) => _mapBloc
-                      ?.add(OnMapInitializedEvent(controller, widget.setting)),
-                  onStyleLoadedListener: (styleLoadedEventData) {},
-                  onLongTapListener: (coordinate) {},
-                  onTapListener: (coordinate) {},
-                ),
-                SafeArea(
-                    child: Column(
+            MapboxOptions.setAccessToken(widget.setting.mapApiKey!);
+            return BlocBuilder<CategoriesBloc, CategoriesState>(
+              builder: (context, state) {
+                return Stack(
                   children: [
-                    PositionSearchBar(
-                      openDrawer: () {},
-                      openSearch: () {},
-                      labelSearch: PositionLocalizations.of(context).search,
-                      openProfile: () {},
+                    MapWidget(
+                      key: const ValueKey("mapWidget"),
+                      cameraOptions: CameraOptions(
+                        center: Point(
+                            coordinates: Position(
+                          0,
+                          0,
+                        )).toJson(),
+                      ),
+                      styleUri: widget.setting.defaultMapStyle!,
+                      textureView: true,
+                      onMapCreated: (controller) => _mapBloc?.add(
+                          OnMapInitializedEvent(controller, widget.setting)),
+                      onStyleLoadedListener: (styleLoadedEventData) {},
+                      onLongTapListener: (coordinate) {},
+                      onTapListener: (coordinate) {},
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    PositionCategoriesWidget(categories: categories)
+                    SafeArea(
+                        child: Column(
+                      children: [
+                        PositionSearchBar(
+                          openDrawer: () {},
+                          openSearch: () {},
+                          labelSearch: PositionLocalizations.of(context).search,
+                          openProfile: () {},
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        PositionCategoriesWidget(
+                            categories: categories,
+                            categoryClick: (category) {
+                              _categoriesBloc?.add(CategorieClick(category));
+                            }),
+                      ],
+                    )),
                   ],
-                )),
-              ],
+                );
+              },
             );
           },
         ),
@@ -107,8 +126,39 @@ class _MapPageState extends State<MapPage> {
           direction: Axis.vertical,
           children: [
             SizedBox(
-              width: 50,
-              height: 50,
+              width: 43,
+              height: 43,
+              child: FittedBox(
+                child: FloatingActionButton(
+                  shape: const CircleBorder(),
+                  heroTag: "layers",
+                  tooltip: "Layers",
+                  backgroundColor: Theme.of(context).colorScheme.background,
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PositionStyleSelection(
+                          onStyleSelected: (style) {
+                            _mapBloc?.add(UserStyleSelectionEvent(style));
+                          },
+                        );
+                      },
+                    );
+                  },
+                  child: const Icon(
+                    Icons.layers,
+                    color: primaryColor,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: 43,
+              height: 43,
               child: FittedBox(
                 child: FloatingActionButton(
                   shape: const CircleBorder(),

@@ -61,6 +61,27 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
                 style: const TextStyle(fontFamily: "OpenSans", color: grey4),
               ),
             ),
+            /*  TypeAheadField(
+              suggestionsCallback: (search) {
+                return [];
+              },
+              builder: (context, controller, focusNode) {
+                return TextFormField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    hintText: "Rechercher",
+                    border: InputBorder.none,
+                  ),
+                );
+              },
+              itemBuilder: (context, city) {
+                return const ListTile(
+                  title: Text(""),
+                );
+              },
+              onSelected: (city) {},
+            ),*/
             const Spacer(),
             const VerticalDivider(
               color: grey3,
