@@ -23,6 +23,7 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.background,
       elevation: 10,
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 0),
       shape: RoundedRectangleBorder(
@@ -31,9 +32,9 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: whiteColor,
+            color: Theme.of(context).colorScheme.background,
             border: Border.all(
-              color: whiteColor,
+              color: Theme.of(context).colorScheme.background,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         height: 45,
@@ -58,7 +59,10 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
               onTap: widget.openSearch,
               child: Text(
                 widget.labelSearch,
-                style: const TextStyle(fontFamily: "OpenSans", color: grey4),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: grey4),
               ),
             ),
             /*  TypeAheadField(

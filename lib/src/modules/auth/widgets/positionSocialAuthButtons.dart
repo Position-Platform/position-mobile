@@ -3,14 +3,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
 
 class PositionSocialAuthButtons extends StatefulWidget {
   const PositionSocialAuthButtons(
-      {super.key, required this.setting, required this.loginBloc});
+      {super.key,
+      required this.setting,
+      required this.onLoginWithApplePressed,
+      required this.onLoginWithGooglePressed,
+      required this.onLoginWithFacebookPressed,
+      required this.onLoginWithOsmPressed});
   final Setting setting;
-  final LoginBloc loginBloc;
+  final VoidCallback onLoginWithApplePressed;
+  final VoidCallback onLoginWithGooglePressed;
+  final VoidCallback onLoginWithFacebookPressed;
+  final VoidCallback onLoginWithOsmPressed;
 
   @override
   State<PositionSocialAuthButtons> createState() =>
@@ -26,17 +33,13 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
         Platform.isAndroid && widget.setting.isGoogleLoginEnabled!
             ? _buildLogoButton(
                 image: 'assets/images/png/google_logo.png',
-                onPressed: () {
-                  widget.loginBloc.add(LoginWithGooglePressed());
-                },
+                onPressed: widget.onLoginWithGooglePressed,
                 tag: "google")
             : const SizedBox(),
         Platform.isIOS && widget.setting.isAppleLoginEnabled!
             ? _buildLogoButton(
                 image: 'assets/images/png/apple.png',
-                onPressed: () {
-                  widget.loginBloc.add(LoginWithApplePressed());
-                },
+                onPressed: widget.onLoginWithApplePressed,
                 tag: "apple")
             : const SizedBox(),
         const SizedBox(
@@ -45,7 +48,7 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
         widget.setting.isFacebookLoginEnabled!
             ? _buildLogoButton(
                 image: 'assets/images/png/facebook_logo.png',
-                onPressed: () {},
+                onPressed: widget.onLoginWithFacebookPressed,
                 tag: "facebook")
             : const SizedBox(),
         const SizedBox(
@@ -54,7 +57,7 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
         widget.setting.isOsmLoginEnabled!
             ? _buildLogoButton(
                 image: 'assets/images/png/osm.png',
-                onPressed: () {},
+                onPressed: widget.onLoginWithOsmPressed,
                 tag: "openstreetmap")
             : const SizedBox(),
       ],
@@ -68,7 +71,7 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
   }) {
     return FloatingActionButton(
       heroTag: tag,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.background,
       onPressed: onPressed,
       child: SizedBox(
         height: 30,

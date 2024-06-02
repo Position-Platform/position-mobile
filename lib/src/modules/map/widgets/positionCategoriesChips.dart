@@ -41,8 +41,10 @@ class _PositionCategorieChipsState extends State<PositionCategorieChips> {
         ),
         label: Text(
           widget.label,
-          style: const TextStyle(
-              color: blackColor, fontFamily: "OpenSans-Bold", fontSize: 11),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(fontFamily: "OpenSans-Bold", fontSize: 11),
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 10.0,

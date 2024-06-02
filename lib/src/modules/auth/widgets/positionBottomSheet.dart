@@ -3,14 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/widgets/positionChooseLanguage.dart';
 
 class PositionBottomSheet extends StatefulWidget {
-  const PositionBottomSheet(
-      {super.key, required this.appBloc, required this.textSize});
-  final AppBloc appBloc;
-  final double textSize;
+  const PositionBottomSheet({super.key, required this.selectLanguage});
+  final Function(String language) selectLanguage;
 
   @override
   State<PositionBottomSheet> createState() => _PositionBottomSheetState();
@@ -19,7 +16,6 @@ class PositionBottomSheet extends StatefulWidget {
 class _PositionBottomSheetState extends State<PositionBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    final Locale appLocale = Localizations.localeOf(context);
     return Container(
       alignment: Alignment.center,
       width: MediaQuery.of(context).size.width,
@@ -31,10 +27,9 @@ class _PositionBottomSheetState extends State<PositionBottomSheet> {
           const SizedBox(
             width: 50,
           ),
-          PositionChooseLanguage(
-              appLocale: appLocale,
-              textSize: widget.textSize,
-              appBloc: widget.appBloc),
+          PositionChooseLanguage(selectLanguage: (language) {
+            widget.selectLanguage(language);
+          }),
           Container(
             margin: const EdgeInsets.only(left: 50),
             child: SvgPicture.asset(

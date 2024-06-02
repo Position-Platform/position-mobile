@@ -14,6 +14,7 @@ import 'package:position/src/modules/categories/bloc/categories/categories_bloc.
 import 'package:position/src/modules/categories/models/categories_model/category.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
 import 'package:position/src/modules/map/widgets/positionCategoriesWidget.dart';
+import 'package:position/src/modules/map/widgets/positionMapFloatongActionButton.dart';
 import 'package:position/src/modules/map/widgets/positionSearchBar.dart';
 import 'package:position/src/modules/map/widgets/positionStyleSelection.dart';
 
@@ -86,7 +87,10 @@ class _MapPageState extends State<MapPage> {
                           0,
                         )),
                       ),
-                      styleUri: widget.setting.defaultMapStyle!,
+                      styleUri: _appBloc?.state.themeData ==
+                              AppThemes.appThemeData[AppTheme.darkTheme]
+                          ? MapboxStyles.DARK
+                          : widget.setting.defaultMapStyle!,
                       textureView: true,
                       onMapCreated: (controller) => _mapBloc?.add(
                           OnMapInitializedEvent(controller, widget.setting)),
@@ -125,55 +129,35 @@ class _MapPageState extends State<MapPage> {
         child: Wrap(
           direction: Axis.vertical,
           children: [
-            SizedBox(
-              width: 43,
-              height: 43,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  shape: const CircleBorder(),
-                  heroTag: "layers",
-                  tooltip: "Layers",
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return PositionStyleSelection(
-                          onStyleSelected: (style) {
-                            _mapBloc?.add(UserStyleSelectionEvent(style));
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: const Icon(
-                    Icons.layers,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            ),
+            PositionMapFloatongActionButton(
+                buttonTag: "layers",
+                buttonPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return PositionStyleSelection(
+                        onStyleSelected: (style) {
+                          _mapBloc?.add(UserStyleSelectionEvent(style));
+                        },
+                      );
+                    },
+                  );
+                },
+                buttonIcon: const Icon(
+                  Icons.layers,
+                  color: primaryColor,
+                )),
             const SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 43,
-              height: 43,
-              child: FittedBox(
-                child: FloatingActionButton(
-                  shape: const CircleBorder(),
-                  heroTag: "location",
-                  tooltip: "Location",
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  onPressed: () {
-                    _mapBloc?.add(GetUserLocationEvent());
-                  },
-                  child: SvgPicture.asset(
-                    "assets/images/svg/icon-my_location.svg",
-                  ),
-                ),
-              ),
-            ),
+            PositionMapFloatongActionButton(
+                buttonTag: "location",
+                buttonPressed: () {
+                  _mapBloc?.add(GetUserLocationEvent());
+                },
+                buttonIcon: SvgPicture.asset(
+                  "assets/images/svg/icon-my_location.svg",
+                )),
           ],
         ),
       ),

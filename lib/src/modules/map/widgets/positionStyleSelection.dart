@@ -29,16 +29,17 @@ class _PositionStyleSelectionState extends State<PositionStyleSelection> {
       'image': 'assets/images/png/satellite.png',
       'style': MapboxStyles.SATELLITE_STREETS
     },
-    /*{
+    {
       'name': 'Dark',
       'image': 'assets/images/png/dark.png',
       'style': MapboxStyles.DARK
-    },*/
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).colorScheme.background,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -72,11 +73,7 @@ class _PositionStyleSelectionState extends State<PositionStyleSelection> {
                   const SizedBox(height: 8.0),
                   Text(
                     style['name'],
-                    style: const TextStyle(
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "OpenSans",
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),

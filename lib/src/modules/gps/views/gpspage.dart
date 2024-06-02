@@ -27,10 +27,10 @@ class _AccessBotton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          PositionLocalizations.of(context).gpsAccess,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text(PositionLocalizations.of(context).gpsAccess,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  fontFamily: "OpenSans-Bold",
+                )),
         const Divider(
           height: 50,
           color: transparent,
@@ -46,7 +46,10 @@ class _AccessBotton extends StatelessWidget {
             },
             child: Text(
               PositionLocalizations.of(context).askAccess,
-              style: const TextStyle(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: whiteColor),
             ))
       ],
     );
@@ -60,7 +63,10 @@ class _EnableGpsMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       PositionLocalizations.of(context).enableGps,
-      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w300),
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.copyWith(fontSize: 25, fontWeight: FontWeight.w300),
     );
   }
 }

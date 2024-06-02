@@ -10,7 +10,6 @@ class PositionValideButton extends StatefulWidget {
     required this.height,
     required this.color,
     required this.buttonText,
-    required this.textSize,
     required this.onPressed,
     required this.textColor,
   });
@@ -19,7 +18,6 @@ class PositionValideButton extends StatefulWidget {
   final Color color;
   final Color textColor;
   final String buttonText;
-  final double textSize;
   final VoidCallback? onPressed;
 
   @override
@@ -59,13 +57,12 @@ class _PositionValideButtonState extends State<PositionValideButton> {
           child: Container(
             alignment: Alignment.center,
             child: Text(widget.buttonText,
-                style: TextStyle(
-                  fontFamily: 'OpenSans-Bold',
-                  color: widget.textColor,
-                  fontSize: widget.textSize,
-                  fontWeight: FontWeight.w700,
-                  fontStyle: FontStyle.normal,
-                )),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: widget.textColor,
+                      fontFamily: 'OpenSans-Bold',
+                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.normal,
+                    )),
           )),
     );
   }
