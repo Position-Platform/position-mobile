@@ -84,7 +84,7 @@ class _MapPageState extends State<MapPage> {
                             coordinates: Position(
                           0,
                           0,
-                        )).toJson(),
+                        )),
                       ),
                       styleUri: widget.setting.defaultMapStyle!,
                       textureView: true,

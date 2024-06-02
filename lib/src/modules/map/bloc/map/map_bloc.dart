@@ -31,8 +31,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     ));
     _mapController?.compass
         .updateSettings(mapbox.CompassSettings(enabled: false));
-    _mapController?.location
-        .updateSettings(mapbox.LocationComponentSettings(enabled: true));
+    _mapController?.location.updateSettings(mapbox.LocationComponentSettings(
+        enabled: true, puckBearingEnabled: true));
     _mapController?.scaleBar.updateSettings(mapbox.ScaleBarSettings(
       enabled: false,
     ));
@@ -48,7 +48,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
                 coordinates: mapbox.Position(
               position!.longitude,
               position.latitude,
-            )).toJson(),
+            )),
             anchor: mapbox.ScreenCoordinate(
                 x: position.latitude, y: position.longitude),
             zoom: initialMapZoom,

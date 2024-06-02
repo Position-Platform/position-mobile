@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // Couleurs personnalisées pour l'application
 const Color primaryColor = Color(0xff05BF95); // valeur de la couleur primaire
+const int primaryColorValue = 0xff05BF95; // valeur de la couleur primaire
 const Color accentColor = Color(0xffFBCC47); // jaune accentué
 const Color primaryDarkColor = Color(0xff004542); // vert foncé primaire
 const Color greyColor = Color(0xff616161); // gris

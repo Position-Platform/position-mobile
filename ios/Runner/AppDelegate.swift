@@ -1,4 +1,5 @@
 import UIKit
+import mapbox_maps_flutter
 import Flutter
 
 @UIApplicationMain
