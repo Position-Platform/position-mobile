@@ -43,7 +43,10 @@ class InitPage extends StatelessWidget {
         }
         // Si l'état est AuthSuccess, afficher la carte avec la position de l'utilisateur
         if (state is AuthSuccess) {
-          return MapPage(setting: state.settings);
+          return MapPage(
+            setting: state.settings,
+            user: state.user,
+          );
         }
         // Si l'état est AuthNoInternet, afficher un message d'erreur indiquant que l'application n'a pas accès à Internet
         if (state is AuthNoInternet) {

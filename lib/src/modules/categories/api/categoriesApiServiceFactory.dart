@@ -36,19 +36,6 @@ class CategoriesApiServiceFactory implements CategoriesApiService {
   }
 
   @override
-  Future<Response> searchCategories(String query) async {
-    Response response;
-
-    try {
-      response = await apiService!.searchcategories(query);
-    } catch (e) {
-      print('Caught ${e.toString()}');
-      rethrow;
-    }
-    return response;
-  }
-
-  @override
   Future<Response> updateCategorieById(
       String token, int id, Map<String, dynamic> body) async {
     Response response;

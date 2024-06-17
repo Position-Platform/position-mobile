@@ -60,12 +60,16 @@ abstract class ApiService extends ChopperService {
   @Get(path: '/api/categories/{id}', headers: {'Accept': 'application/json'})
   Future<Response> getcategoriesbyid(@Path('id') int idCategorie);
 
-  @Get(path: '/api/search/categories', headers: {'Accept': 'application/json'})
-  Future<Response> searchcategories(
-    @Query('q') String query,
-  );
-
   @Put(path: '/api/categories/{id}', headers: {'Accept': 'application/json'})
   Future<Response> updatecategoriebyid(@Header('Authorization') String token,
       @Path('id') int idCategorie, @Body() Map<String, dynamic> body);
+
+  //Search
+  @Get(
+      path: '/api/search/etablissements',
+      headers: {'Accept': 'application/json'})
+  Future<Response> search(
+    @Query('q') String query,
+    @Query('user_id') int userId,
+  );
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:chopper/chopper.dart';
+import 'package:drift/drift.dart';
+import 'package:position/src/core/database/db.dart';
 import 'package:position/src/core/helpers/network.dart';
 import 'package:position/src/core/helpers/sharedpreferences.dart';
 import 'package:position/src/core/utils/result.dart';
@@ -25,12 +27,30 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   @override
   Future<Result<List<Category>>> getallcategories() async {
     try {
+      var localCategories = await categoryDao!.allCategories;
+
+      if (localCategories.isNotEmpty) {
+        return Result(
+            success:
+                localCategories.map((category) => category.category!).toList());
+      }
+
       bool isConnected = await networkInfoHelper!.isConnected();
       if (isConnected) {
         try {
           final Response response =
               await categoriesApiService!.getAllcategories();
           var model = CategoriesModel.fromJson(response.body);
+
+          await Future.wait(model.data!.categories!.map((onlineCategory) async {
+            try {
+              await categoryDao!.addCategory(CategoryTableCompanion(
+                  id: Value(onlineCategory.id!),
+                  category: Value(onlineCategory)));
+            } catch (e) {
+              return Result(error: DbInsertError());
+            }
+          }));
 
           return Result(success: model.data!.categories);
         } catch (e) {
@@ -40,7 +60,7 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
         return Result(error: NoInternetError());
       }
     } catch (e) {
-      return Result(error: ServerError());
+      return Result(error: DbGetDataError());
     }
   }
 
@@ -52,25 +72,6 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
       return Result(success: categorie.category!);
     } catch (e) {
       return Result(error: DbGetDataError());
-    }
-  }
-
-  @override
-  Future<Result<List<Category>>> searchcategories(String query) async {
-    bool isConnected = await networkInfoHelper!.isConnected();
-    if (isConnected) {
-      try {
-        final Response response =
-            await categoriesApiService!.searchCategories(query);
-
-        var model = CategoriesModel.fromJson(response.body);
-
-        return Result(success: model.data!.categories);
-      } catch (e) {
-        return Result(error: ServerError());
-      }
-    } else {
-      return Result(error: NoInternetError());
     }
   }
 }

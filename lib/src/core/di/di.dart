@@ -27,6 +27,11 @@ import 'package:position/src/modules/categories/repositories/categoriesRepositor
 import 'package:position/src/modules/categories/repositories/categoriesRepositoryImpl.dart';
 import 'package:position/src/modules/gps/bloc/gps_bloc.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
+import 'package:position/src/modules/search/api/searchApiService.dart';
+import 'package:position/src/modules/search/api/searchApiServiceFactory.dart';
+import 'package:position/src/modules/search/bloc/bloc/search_bloc.dart';
+import 'package:position/src/modules/search/repositories/searchRepository.dart';
+import 'package:position/src/modules/search/repositories/searchRepositoryImpl.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -51,6 +56,8 @@ Future<void> init() async {
       () => AuthApiServiceFactory(apiService));
   getIt.registerLazySingleton<CategoriesApiService>(
       () => CategoriesApiServiceFactory(apiService));
+  getIt.registerLazySingleton<SearchApiService>(
+      () => SearchApiServiceFactory(apiService));
 
   //Utils
   // Enregistrement des instances des différents helpers
@@ -91,6 +98,13 @@ Future<void> init() async {
         categoryDao: getIt()),
   );
 
+  getIt.registerFactory<SearchRepository>(
+    () => SearchRepositoryImpl(
+      searchApiService: getIt(),
+      networkInfoHelper: getIt(),
+    ),
+  );
+
   //Bloc
   // Enregistrement des instances des différents blocs
   getIt.registerFactory<AppBloc>(() => AppBloc());
@@ -106,4 +120,6 @@ Future<void> init() async {
   getIt.registerFactory<MapBloc>(() => MapBloc());
   getIt.registerFactory<CategoriesBloc>(
       () => CategoriesBloc(categoriesRepository: getIt()));
+  getIt
+      .registerFactory<SearchBloc>(() => SearchBloc(searchRepository: getIt()));
 }

@@ -7,6 +7,4 @@ abstract class CategoriesRepository {
   Future<Result<List<Category>>> getallcategories();
 
   Future<Result<Category>> getcategoriebyid(int id);
-
-  Future<Result<List<Category>>> searchcategories(String query);
 }

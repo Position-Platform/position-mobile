@@ -57,35 +57,9 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
             InkWell(
               highlightColor: transparent,
               onTap: widget.openSearch,
-              child: Text(
-                widget.labelSearch,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: grey4),
-              ),
+              child: Text(widget.labelSearch,
+                  style: Theme.of(context).textTheme.bodyMedium!),
             ),
-            /*  TypeAheadField(
-              suggestionsCallback: (search) {
-                return [];
-              },
-              builder: (context, controller, focusNode) {
-                return TextFormField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  decoration: const InputDecoration(
-                    hintText: "Rechercher",
-                    border: InputBorder.none,
-                  ),
-                );
-              },
-              itemBuilder: (context, city) {
-                return const ListTile(
-                  title: Text(""),
-                );
-              },
-              onSelected: (city) {},
-            ),*/
             const Spacer(),
             const VerticalDivider(
               color: grey3,

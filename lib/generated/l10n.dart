@@ -610,6 +610,76 @@ class PositionLocalizations {
       args: [],
     );
   }
+
+  /// `Ouvert Maintenant : `
+  String get opennow {
+    return Intl.message(
+      'Ouvert Maintenant : ',
+      name: 'opennow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fermé : `
+  String get close {
+    return Intl.message(
+      'Fermé : ',
+      name: 'close',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ouvert`
+  String get open {
+    return Intl.message(
+      'Ouvert',
+      name: 'open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fermé`
+  String get closed {
+    return Intl.message(
+      'Fermé',
+      name: 'closed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Erreur de Chargement`
+  String get searcherror {
+    return Intl.message(
+      'Erreur de Chargement',
+      name: 'searcherror',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucun resultat trouvé`
+  String get searchnotfound {
+    return Intl.message(
+      'Aucun resultat trouvé',
+      name: 'searchnotfound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rechercher`
+  String get hintSearch {
+    return Intl.message(
+      'Rechercher',
+      name: 'hintSearch',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate

@@ -7,8 +7,6 @@ abstract class CategoriesApiService {
 
   Future<Response> getCategorieById(int id);
 
-  Future<Response> searchCategories(String query);
-
   Future<Response> updateCategorieById(
       String token, int id, Map<String, dynamic> body);
 }

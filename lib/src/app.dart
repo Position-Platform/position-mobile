@@ -9,6 +9,7 @@ import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/categories/bloc/categories/categories_bloc.dart';
 import 'package:position/src/modules/gps/views/loading.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
+import 'package:position/src/modules/search/bloc/bloc/search_bloc.dart';
 
 class MyApp extends StatelessWidget {
   // Le constructeur prend un paramètre initialLink et appelle le constructeur de la classe parent avec la clé et le paramètre initialLink.
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
           BlocProvider<CategoriesBloc>(
             create: (context) => getIt<CategoriesBloc>(),
           ),
+          BlocProvider<SearchBloc>(
+            create: (context) => getIt<SearchBloc>(),
+          )
         ],
         child: BlocBuilder<AppBloc, AppState>(
           builder: (context, state) {

@@ -10,6 +10,7 @@ import 'package:position/src/core/utils/themes.dart';
 import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
+import 'package:position/src/modules/auth/models/user_model/user.dart';
 import 'package:position/src/modules/categories/bloc/categories/categories_bloc.dart';
 import 'package:position/src/modules/categories/models/categories_model/category.dart';
 import 'package:position/src/modules/map/bloc/map/map_bloc.dart';
@@ -17,10 +18,14 @@ import 'package:position/src/modules/map/widgets/positionCategoriesWidget.dart';
 import 'package:position/src/modules/map/widgets/positionMapFloatongActionButton.dart';
 import 'package:position/src/modules/map/widgets/positionSearchBar.dart';
 import 'package:position/src/modules/map/widgets/positionStyleSelection.dart';
+import 'package:position/src/modules/search/bloc/bloc/search_bloc.dart';
+import 'package:position/src/modules/search/models/search_result_model/search_model.dart';
+import 'package:position/src/modules/search/views/positionMapSearchDelegate.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key, required this.setting});
+  const MapPage({super.key, required this.setting, required this.user});
   final Setting setting;
+  final User user;
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -103,7 +108,16 @@ class _MapPageState extends State<MapPage> {
                       children: [
                         PositionSearchBar(
                           openDrawer: () {},
-                          openSearch: () {},
+                          openSearch: () async {
+                            await showSearch(
+                                context: context,
+                                delegate: PositionMapSearchDelegate(
+                                    hintText: PositionLocalizations.of(context)
+                                        .hintSearch,
+                                    searchBloc:
+                                        BlocProvider.of<SearchBloc>(context),
+                                    user: widget.user)) as SearchResultModel;
+                          },
                           labelSearch: PositionLocalizations.of(context).search,
                           openProfile: () {},
                         ),

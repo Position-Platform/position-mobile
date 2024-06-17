@@ -214,23 +214,6 @@ final class _$ApiService extends ApiService {
   }
 
   @override
-  Future<Response<dynamic>> searchcategories(String query) {
-    final Uri $url = Uri.parse('${apiUrl}/api/search/categories');
-    final Map<String, dynamic> $params = <String, dynamic>{'q': query};
-    final Map<String, String> $headers = {
-      'Accept': 'application/json',
-    };
-    final Request $request = Request(
-      'GET',
-      $url,
-      client.baseUrl,
-      parameters: $params,
-      headers: $headers,
-    );
-    return client.send<dynamic, dynamic>($request);
-  }
-
-  @override
   Future<Response<dynamic>> updatecategoriebyid(
     String token,
     int idCategorie,
@@ -247,6 +230,29 @@ final class _$ApiService extends ApiService {
       $url,
       client.baseUrl,
       body: $body,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> search(
+    String query,
+    int userId,
+  ) {
+    final Uri $url = Uri.parse('${apiUrl}/api/search/etablissements');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'q': query,
+      'user_id': userId,
+    };
+    final Map<String, String> $headers = {
+      'Accept': 'application/json',
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
       headers: $headers,
     );
     return client.send<dynamic, dynamic>($request);
