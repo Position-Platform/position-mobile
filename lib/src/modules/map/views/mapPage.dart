@@ -19,7 +19,6 @@ import 'package:position/src/modules/map/widgets/positionMapFloatongActionButton
 import 'package:position/src/modules/map/widgets/positionSearchBar.dart';
 import 'package:position/src/modules/map/widgets/positionStyleSelection.dart';
 import 'package:position/src/modules/search/bloc/bloc/search_bloc.dart';
-import 'package:position/src/modules/search/models/search_result_model/search_model.dart';
 import 'package:position/src/modules/search/views/positionMapSearchDelegate.dart';
 
 class MapPage extends StatefulWidget {
@@ -110,13 +109,17 @@ class _MapPageState extends State<MapPage> {
                           openDrawer: () {},
                           openSearch: () async {
                             await showSearch(
-                                context: context,
-                                delegate: PositionMapSearchDelegate(
-                                    hintText: PositionLocalizations.of(context)
-                                        .hintSearch,
-                                    searchBloc:
-                                        BlocProvider.of<SearchBloc>(context),
-                                    user: widget.user)) as SearchResultModel;
+                                    context: context,
+                                    delegate: PositionMapSearchDelegate(
+                                        hintText:
+                                            PositionLocalizations.of(context)
+                                                .hintSearch,
+                                        searchBloc: BlocProvider.of<SearchBloc>(
+                                            context),
+                                        user: widget.user))
+                                .then((value) {
+                              if (value != null) {}
+                            });
                           },
                           labelSearch: PositionLocalizations.of(context).search,
                           openProfile: () {},

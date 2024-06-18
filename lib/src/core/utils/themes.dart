@@ -22,6 +22,25 @@ class AppThemes {
   // Définit les objets ThemeData pour les thèmes clair et foncé
   static final appThemeData = {
     AppTheme.lightTheme: ThemeData(
+      appBarTheme: const AppBarTheme(
+        backgroundColor: whiteColor,
+        foregroundColor: whiteColor,
+        shadowColor: whiteColor,
+        surfaceTintColor: whiteColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: blackColor),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        outlineBorder: BorderSide.none,
+        hintStyle: TextStyle(
+          color: blackColor,
+        ),
+      ),
       scaffoldBackgroundColor: whiteColor,
       primaryColor: primaryColor,
       canvasColor: whiteColor,
@@ -41,6 +60,25 @@ class AppThemes {
       fontFamily: "OpenSans",
     ),
     AppTheme.darkTheme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: blackColor,
+          foregroundColor: blackColor,
+          shadowColor: blackColor,
+          surfaceTintColor: blackColor,
+          elevation: 0,
+          iconTheme: IconThemeData(color: whiteColor),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          errorBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          outlineBorder: BorderSide.none,
+          hintStyle: TextStyle(
+            color: whiteColor,
+          ),
+        ),
         scaffoldBackgroundColor: blackColor,
         primaryColor: primaryDarkColor,
         canvasColor: blackColor,

@@ -23,6 +23,18 @@ class PositionMapSearchDelegate extends SearchDelegate<SearchResultModel> {
   @override
   String? get searchFieldLabel => hintText;
 
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return theme;
+  }
+
+  @override
+  TextStyle? get searchFieldStyle => const TextStyle(
+        fontSize: 14,
+        fontFamily: "OpenSans",
+      );
+
   // first overwrite to
   // clear the search text
   @override
@@ -32,8 +44,9 @@ class PositionMapSearchDelegate extends SearchDelegate<SearchResultModel> {
         onPressed: () {
           query = '';
         },
-        icon: SvgPicture.asset(
-          "assets/images/svg/icon-clear.svg",
+        icon: const Icon(
+          Icons.clear,
+          color: primaryColor,
         ),
       ),
       const VerticalDivider(
@@ -60,8 +73,9 @@ class PositionMapSearchDelegate extends SearchDelegate<SearchResultModel> {
       onPressed: () {
         close(context, SearchResultModel());
       },
-      icon: SvgPicture.asset(
-        "assets/images/svg/icon-arrow_left.svg",
+      icon: const Icon(
+        Icons.arrow_back,
+        color: primaryColor,
       ),
     );
   }
