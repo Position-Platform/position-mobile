@@ -23,7 +23,7 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       elevation: 10,
       margin: const EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 0),
       shape: RoundedRectangleBorder(
@@ -32,9 +32,9 @@ class _PositionSearchBarState extends State<PositionSearchBar> {
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             border: Border.all(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         height: 45,

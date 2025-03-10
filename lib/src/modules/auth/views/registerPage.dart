@@ -98,9 +98,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(Theme.of(context).colorScheme.background);
+    changeStatusColor(Theme.of(context).colorScheme.surface);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
@@ -163,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background),
+                        color: Theme.of(context).colorScheme.surface),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

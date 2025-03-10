@@ -30,7 +30,7 @@ class _PositionMapFloatongActionButtonState
           shape: const CircleBorder(),
           heroTag: widget.buttonTag,
           tooltip: widget.buttonTag,
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           onPressed: widget.buttonPressed,
           child: widget.buttonIcon,
         ),

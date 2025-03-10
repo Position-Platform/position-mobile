@@ -71,7 +71,7 @@ class _PositionSocialAuthButtonsState extends State<PositionSocialAuthButtons> {
   }) {
     return FloatingActionButton(
       heroTag: tag,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       onPressed: onPressed,
       child: SizedBox(
         height: 30,

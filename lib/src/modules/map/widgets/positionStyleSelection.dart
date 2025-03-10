@@ -39,7 +39,7 @@ class _PositionStyleSelectionState extends State<PositionStyleSelection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(16.0),
       child: Row(

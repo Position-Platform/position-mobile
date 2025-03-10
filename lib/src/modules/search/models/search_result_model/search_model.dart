@@ -40,11 +40,10 @@ class SearchResultModel {
     return 'SearchModel(name: $name, id: $id, type: $type, logo: $logo, logomap:$logomap, details: $details, longitude: $longitude, latitude: $latitude,etablissement: $etablissement,category:$category,isOpenNow:$isOpenNow,distance:$distance, plageDay:$plageDay)';
   }
 
-  factory SearchResultModel.fromJson(Map<String, dynamic> json) {
-    return _$SearchModelFromJson(json);
-  }
+  factory SearchResultModel.fromJson(Map<String, dynamic> json) =>
+      _$SearchResultModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SearchModelToJson(this);
+  Map<String, dynamic> toJson() => _$SearchResultModelToJson(this);
 
   SearchResultModel copyWith(
       {String? name,

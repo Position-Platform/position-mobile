@@ -29,7 +29,7 @@ class _PositionCategorieChipsState extends State<PositionCategorieChips> {
         labelPadding: const EdgeInsets.all(1.0),
         shape: StadiumBorder(
             side: BorderSide(
-          color: Theme.of(context).colorScheme.background,
+          color: Theme.of(context).colorScheme.surface,
         )),
         avatar: CircleAvatar(
           backgroundColor: transparent,
@@ -46,7 +46,7 @@ class _PositionCategorieChipsState extends State<PositionCategorieChips> {
               .bodyMedium
               ?.copyWith(fontFamily: "OpenSans-Bold", fontSize: 11),
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 10.0,
         shadowColor: transparent,
         padding: const EdgeInsets.all(6.0),
