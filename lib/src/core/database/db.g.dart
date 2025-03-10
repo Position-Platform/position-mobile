@@ -388,8 +388,6 @@ class $CategoryTableTable extends CategoryTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _categoryMeta =
-      const VerificationMeta('category');
   @override
   late final GeneratedColumnWithTypeConverter<Category?, String> category =
       GeneratedColumn<String>('category', aliasedName, true,
@@ -410,7 +408,6 @@ class $CategoryTableTable extends CategoryTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_categoryMeta, const VerificationResult.success());
     return context;
   }
 
@@ -487,6 +484,13 @@ class CategoryTableData extends DataClass
         id: id ?? this.id,
         category: category.present ? category.value : this.category,
       );
+  CategoryTableData copyWithCompanion(CategoryTableCompanion data) {
+    return CategoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      category: data.category.present ? data.category.value : this.category,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('CategoryTableData(')
@@ -821,39 +825,7 @@ typedef $$UserTableTableProcessedTableManager = ProcessedTableManager<
     ),
     UserTableData,
     PrefetchHooks Function()>;
-
-<<<<<<< HEAD
-class $$UserTableTableFilterComposer
-    extends FilterComposer<_$MyDatabase, $UserTableTable> {
-  $$UserTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnWithTypeConverterFilters<User?, User, String> get user =>
-      $state.composableBuilder(
-          column: $state.table.user,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
-}
-
-class $$UserTableTableOrderingComposer
-    extends OrderingComposer<_$MyDatabase, $UserTableTable> {
-  $$UserTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get user => $state.composableBuilder(
-      column: $state.table.user,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-typedef $$CategoryTableTableInsertCompanionBuilder = CategoryTableCompanion
+typedef $$CategoryTableTableCreateCompanionBuilder = CategoryTableCompanion
     Function({
   Value<int> id,
   Value<Category?> category,
@@ -864,26 +836,82 @@ typedef $$CategoryTableTableUpdateCompanionBuilder = CategoryTableCompanion
   Value<Category?> category,
 });
 
+class $$CategoryTableTableFilterComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<Category?, Category, String> get category =>
+      $composableBuilder(
+          column: $table.category,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$CategoryTableTableOrderingComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CategoryTableTableAnnotationComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Category?, String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+}
+
 class $$CategoryTableTableTableManager extends RootTableManager<
     _$MyDatabase,
     $CategoryTableTable,
     CategoryTableData,
     $$CategoryTableTableFilterComposer,
     $$CategoryTableTableOrderingComposer,
-    $$CategoryTableTableProcessedTableManager,
-    $$CategoryTableTableInsertCompanionBuilder,
-    $$CategoryTableTableUpdateCompanionBuilder> {
+    $$CategoryTableTableAnnotationComposer,
+    $$CategoryTableTableCreateCompanionBuilder,
+    $$CategoryTableTableUpdateCompanionBuilder,
+    (
+      CategoryTableData,
+      BaseReferences<_$MyDatabase, $CategoryTableTable, CategoryTableData>
+    ),
+    CategoryTableData,
+    PrefetchHooks Function()> {
   $$CategoryTableTableTableManager(_$MyDatabase db, $CategoryTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$CategoryTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$CategoryTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$CategoryTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          createFilteringComposer: () =>
+              $$CategoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoryTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<Category?> category = const Value.absent(),
           }) =>
@@ -891,7 +919,7 @@ class $$CategoryTableTableTableManager extends RootTableManager<
             id: id,
             category: category,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<Category?> category = const Value.absent(),
           }) =>
@@ -899,55 +927,30 @@ class $$CategoryTableTableTableManager extends RootTableManager<
             id: id,
             category: category,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$CategoryTableTableProcessedTableManager extends ProcessedTableManager<
+typedef $$CategoryTableTableProcessedTableManager = ProcessedTableManager<
     _$MyDatabase,
     $CategoryTableTable,
     CategoryTableData,
     $$CategoryTableTableFilterComposer,
     $$CategoryTableTableOrderingComposer,
-    $$CategoryTableTableProcessedTableManager,
-    $$CategoryTableTableInsertCompanionBuilder,
-    $$CategoryTableTableUpdateCompanionBuilder> {
-  $$CategoryTableTableProcessedTableManager(super.$state);
-}
+    $$CategoryTableTableAnnotationComposer,
+    $$CategoryTableTableCreateCompanionBuilder,
+    $$CategoryTableTableUpdateCompanionBuilder,
+    (
+      CategoryTableData,
+      BaseReferences<_$MyDatabase, $CategoryTableTable, CategoryTableData>
+    ),
+    CategoryTableData,
+    PrefetchHooks Function()>;
 
-class $$CategoryTableTableFilterComposer
-    extends FilterComposer<_$MyDatabase, $CategoryTableTable> {
-  $$CategoryTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnWithTypeConverterFilters<Category?, Category, String> get category =>
-      $state.composableBuilder(
-          column: $state.table.category,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
-}
-
-class $$CategoryTableTableOrderingComposer
-    extends OrderingComposer<_$MyDatabase, $CategoryTableTable> {
-  $$CategoryTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get category => $state.composableBuilder(
-      column: $state.table.category,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-class _$MyDatabaseManager {
-=======
 class $MyDatabaseManager {
->>>>>>> b4ee19dd81d11e88e28f90de00b09cf104b2bc07
   final _$MyDatabase _db;
   $MyDatabaseManager(this._db);
   $$SettingTableTableTableManager get settingTable =>

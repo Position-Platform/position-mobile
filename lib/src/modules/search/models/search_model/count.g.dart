@@ -7,8 +7,8 @@ part of 'count.dart';
 // **************************************************************************
 
 Count _$CountFromJson(Map<String, dynamic> json) => Count(
-      count: json['count'] as int?,
-      rating: json['rating'] as int?,
+      count: (json['count'] as num?)?.toInt(),
+      rating: (json['rating'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CountToJson(Count instance) => <String, dynamic>{
