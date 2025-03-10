@@ -56,46 +56,25 @@ class AppThemes {
       // Définit le schéma de couleurs pour le thème clair
       colorScheme:
           const ColorScheme.light(primary: primaryColor, secondary: accentColor)
-              .copyWith(background: whiteColor),
-      fontFamily: "OpenSans",
+              .copyWith(surface: whiteColor),
     ),
     AppTheme.darkTheme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: blackColor,
-          foregroundColor: blackColor,
-          shadowColor: blackColor,
-          surfaceTintColor: blackColor,
-          elevation: 0,
-          iconTheme: IconThemeData(color: whiteColor),
-        ),
-        inputDecorationTheme: const InputDecorationTheme(
-          border: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          errorBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          outlineBorder: BorderSide.none,
-          hintStyle: TextStyle(
-            color: whiteColor,
-          ),
-        ),
-        scaffoldBackgroundColor: blackColor,
-        primaryColor: primaryDarkColor,
-        canvasColor: blackColor,
-        primaryIconTheme: const IconThemeData(color: whiteColor),
-        // Utilise les styles de texte partagés et définit les couleurs de texte
-        textTheme: _textTheme.copyWith(
-          bodyLarge: _textTheme.bodyLarge?.copyWith(color: whiteColor),
-          bodyMedium: _textTheme.bodyMedium?.copyWith(color: whiteColor),
-          bodySmall: _textTheme.bodySmall?.copyWith(color: whiteColor),
-        ),
-        textSelectionTheme:
-            const TextSelectionThemeData(cursorColor: accentColor),
-        // Définit le schéma de couleurs pour le thème foncé
-        colorScheme: const ColorScheme.light(
-                primary: primaryDarkColor, secondary: accentColor)
-            .copyWith(background: blackColor),
-        fontFamily: "OpenSans")
+      scaffoldBackgroundColor: blackColor,
+      primaryColor: primaryDarkColor,
+      canvasColor: blackColor,
+      primaryIconTheme: const IconThemeData(color: whiteColor),
+      // Utilise les styles de texte partagés et définit les couleurs de texte
+      textTheme: _textTheme.copyWith(
+        bodyLarge: _textTheme.bodyLarge?.copyWith(color: whiteColor),
+        bodyMedium: _textTheme.bodyMedium?.copyWith(color: whiteColor),
+      ),
+      textSelectionTheme:
+          const TextSelectionThemeData(cursorColor: accentColor),
+      // Définit le schéma de couleurs pour le thème foncé
+      colorScheme: const ColorScheme.light(
+              primary: primaryDarkColor, secondary: accentColor)
+          .copyWith(surface: blackColor),
+    )
   };
 }
 
