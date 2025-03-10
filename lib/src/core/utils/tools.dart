@@ -6,7 +6,7 @@ import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 changeStatusColor(Color color) async {
   try {
     await FlutterStatusbarcolor.setStatusBarColor(color, animate: true);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(
+    await FlutterStatusbarcolor.setStatusBarWhiteForeground(
         useWhiteForeground(color));
   } on Exception catch (e) {
     print(e);

@@ -42,7 +42,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   void _getUserLocation(
       GetUserLocationEvent event, Emitter<MapState> emit) async {
     Position? position = await Geolocator.getLastKnownPosition();
-    _mapController?.flyTo(
+    await _mapController?.flyTo(
         mapbox.CameraOptions(
             center: mapbox.Point(
                 coordinates: mapbox.Position(
