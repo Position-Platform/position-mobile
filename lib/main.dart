@@ -17,7 +17,7 @@ import 'package:position/src/modules/gps/bloc/gps_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  runZonedGuarded(() async {
+  await runZonedGuarded(() async {
     // Initialisation de tous les widgets
     WidgetsFlutterBinding.ensureInitialized();
     // Initialisation des variables d'environement
