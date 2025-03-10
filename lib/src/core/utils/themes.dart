@@ -29,7 +29,7 @@ class AppThemes {
       // Définit le schéma de couleurs pour le thème clair
       colorScheme:
           const ColorScheme.light(primary: primaryColor, secondary: accentColor)
-              .copyWith(background: whiteColor),
+              .copyWith(surface: whiteColor),
     ),
     AppTheme.darkTheme: ThemeData(
       scaffoldBackgroundColor: blackColor,
@@ -46,7 +46,7 @@ class AppThemes {
       // Définit le schéma de couleurs pour le thème foncé
       colorScheme: const ColorScheme.light(
               primary: primaryDarkColor, secondary: accentColor)
-          .copyWith(background: blackColor),
+          .copyWith(surface: blackColor),
     )
   };
 }

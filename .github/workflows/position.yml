@@ -31,7 +31,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable" # 'dev', 'alpha', default to: 'stable'
-          flutter-version: "3.19.6" # you can also specify exact version of flutter
+          flutter-version: "3.29.0" # you can also specify exact version of flutter
 
       # Get flutter dependencies.
       - run: flutter pub get
@@ -49,7 +49,7 @@ jobs:
       # - run: flutter build apk
 
       # Build appbundle.
-      - run: flutter build appbundle
+      # - run: flutter build appbundle
 
       # Build Ios
-      - run: flutter build ios --release --no-codesign
+      # - run: flutter build ios --release --no-codesign

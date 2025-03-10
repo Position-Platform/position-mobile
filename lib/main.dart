@@ -33,7 +33,8 @@ void main() async {
 
     // Configuration de HydratedBloc pour la persistance de l'état
     HydratedBloc.storage = await HydratedStorage.build(
-      storageDirectory: await getTemporaryDirectory(),
+      storageDirectory:
+          HydratedStorageDirectory((await getTemporaryDirectory()).path),
     );
     // Configuration de l'observateur de BLoC
     Bloc.observer = SimpleBlocObserver();

@@ -43,11 +43,11 @@ class _PositionErrorWidgetState extends State<PositionErrorWidget> {
           ),
           TextButton(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) => primaryColor,
+                backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) => primaryColor,
                 ),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                shape: WidgetStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 )),
               ),

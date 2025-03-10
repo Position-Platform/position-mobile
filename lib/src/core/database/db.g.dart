@@ -18,8 +18,6 @@ class $SettingTableTable extends SettingTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _settingMeta =
-      const VerificationMeta('setting');
   @override
   late final GeneratedColumnWithTypeConverter<Setting?, String> setting =
       GeneratedColumn<String>('setting', aliasedName, true,
@@ -40,7 +38,6 @@ class $SettingTableTable extends SettingTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_settingMeta, const VerificationResult.success());
     return context;
   }
 
@@ -117,6 +114,13 @@ class SettingTableData extends DataClass
         id: id ?? this.id,
         setting: setting.present ? setting.value : this.setting,
       );
+  SettingTableData copyWithCompanion(SettingTableCompanion data) {
+    return SettingTableData(
+      id: data.id.present ? data.id.value : this.id,
+      setting: data.setting.present ? data.setting.value : this.setting,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('SettingTableData(')
@@ -202,7 +206,6 @@ class $UserTableTable extends UserTable
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _userMeta = const VerificationMeta('user');
   @override
   late final GeneratedColumnWithTypeConverter<User?, String> user =
       GeneratedColumn<String>('user', aliasedName, true,
@@ -223,7 +226,6 @@ class $UserTableTable extends UserTable
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    context.handle(_userMeta, const VerificationResult.success());
     return context;
   }
 
@@ -294,6 +296,13 @@ class UserTableData extends DataClass implements Insertable<UserTableData> {
         id: id ?? this.id,
         user: user.present ? user.value : this.user,
       );
+  UserTableData copyWithCompanion(UserTableCompanion data) {
+    return UserTableData(
+      id: data.id.present ? data.id.value : this.id,
+      user: data.user.present ? data.user.value : this.user,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('UserTableData(')
@@ -366,7 +375,7 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
-  _$MyDatabaseManager get managers => _$MyDatabaseManager(this);
+  $MyDatabaseManager get managers => $MyDatabaseManager(this);
   late final $SettingTableTable settingTable = $SettingTableTable(this);
   late final $UserTableTable userTable = $UserTableTable(this);
   late final SettingDao settingDao = SettingDao(this as MyDatabase);
@@ -378,7 +387,7 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [settingTable, userTable];
 }
 
-typedef $$SettingTableTableInsertCompanionBuilder = SettingTableCompanion
+typedef $$SettingTableTableCreateCompanionBuilder = SettingTableCompanion
     Function({
   Value<int> id,
   Value<Setting?> setting,
@@ -389,26 +398,82 @@ typedef $$SettingTableTableUpdateCompanionBuilder = SettingTableCompanion
   Value<Setting?> setting,
 });
 
+class $$SettingTableTableFilterComposer
+    extends Composer<_$MyDatabase, $SettingTableTable> {
+  $$SettingTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<Setting?, Setting, String> get setting =>
+      $composableBuilder(
+          column: $table.setting,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$SettingTableTableOrderingComposer
+    extends Composer<_$MyDatabase, $SettingTableTable> {
+  $$SettingTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get setting => $composableBuilder(
+      column: $table.setting, builder: (column) => ColumnOrderings(column));
+}
+
+class $$SettingTableTableAnnotationComposer
+    extends Composer<_$MyDatabase, $SettingTableTable> {
+  $$SettingTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Setting?, String> get setting =>
+      $composableBuilder(column: $table.setting, builder: (column) => column);
+}
+
 class $$SettingTableTableTableManager extends RootTableManager<
     _$MyDatabase,
     $SettingTableTable,
     SettingTableData,
     $$SettingTableTableFilterComposer,
     $$SettingTableTableOrderingComposer,
-    $$SettingTableTableProcessedTableManager,
-    $$SettingTableTableInsertCompanionBuilder,
-    $$SettingTableTableUpdateCompanionBuilder> {
+    $$SettingTableTableAnnotationComposer,
+    $$SettingTableTableCreateCompanionBuilder,
+    $$SettingTableTableUpdateCompanionBuilder,
+    (
+      SettingTableData,
+      BaseReferences<_$MyDatabase, $SettingTableTable, SettingTableData>
+    ),
+    SettingTableData,
+    PrefetchHooks Function()> {
   $$SettingTableTableTableManager(_$MyDatabase db, $SettingTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$SettingTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$SettingTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$SettingTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          createFilteringComposer: () =>
+              $$SettingTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$SettingTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$SettingTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<Setting?> setting = const Value.absent(),
           }) =>
@@ -416,7 +481,7 @@ class $$SettingTableTableTableManager extends RootTableManager<
             id: id,
             setting: setting,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<Setting?> setting = const Value.absent(),
           }) =>
@@ -424,52 +489,29 @@ class $$SettingTableTableTableManager extends RootTableManager<
             id: id,
             setting: setting,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$SettingTableTableProcessedTableManager extends ProcessedTableManager<
+typedef $$SettingTableTableProcessedTableManager = ProcessedTableManager<
     _$MyDatabase,
     $SettingTableTable,
     SettingTableData,
     $$SettingTableTableFilterComposer,
     $$SettingTableTableOrderingComposer,
-    $$SettingTableTableProcessedTableManager,
-    $$SettingTableTableInsertCompanionBuilder,
-    $$SettingTableTableUpdateCompanionBuilder> {
-  $$SettingTableTableProcessedTableManager(super.$state);
-}
-
-class $$SettingTableTableFilterComposer
-    extends FilterComposer<_$MyDatabase, $SettingTableTable> {
-  $$SettingTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnWithTypeConverterFilters<Setting?, Setting, String> get setting =>
-      $state.composableBuilder(
-          column: $state.table.setting,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
-}
-
-class $$SettingTableTableOrderingComposer
-    extends OrderingComposer<_$MyDatabase, $SettingTableTable> {
-  $$SettingTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get setting => $state.composableBuilder(
-      column: $state.table.setting,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-typedef $$UserTableTableInsertCompanionBuilder = UserTableCompanion Function({
+    $$SettingTableTableAnnotationComposer,
+    $$SettingTableTableCreateCompanionBuilder,
+    $$SettingTableTableUpdateCompanionBuilder,
+    (
+      SettingTableData,
+      BaseReferences<_$MyDatabase, $SettingTableTable, SettingTableData>
+    ),
+    SettingTableData,
+    PrefetchHooks Function()>;
+typedef $$UserTableTableCreateCompanionBuilder = UserTableCompanion Function({
   Value<int> id,
   Value<User?> user,
 });
@@ -478,26 +520,82 @@ typedef $$UserTableTableUpdateCompanionBuilder = UserTableCompanion Function({
   Value<User?> user,
 });
 
+class $$UserTableTableFilterComposer
+    extends Composer<_$MyDatabase, $UserTableTable> {
+  $$UserTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<User?, User, String> get user =>
+      $composableBuilder(
+          column: $table.user,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$UserTableTableOrderingComposer
+    extends Composer<_$MyDatabase, $UserTableTable> {
+  $$UserTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get user => $composableBuilder(
+      column: $table.user, builder: (column) => ColumnOrderings(column));
+}
+
+class $$UserTableTableAnnotationComposer
+    extends Composer<_$MyDatabase, $UserTableTable> {
+  $$UserTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<User?, String> get user =>
+      $composableBuilder(column: $table.user, builder: (column) => column);
+}
+
 class $$UserTableTableTableManager extends RootTableManager<
     _$MyDatabase,
     $UserTableTable,
     UserTableData,
     $$UserTableTableFilterComposer,
     $$UserTableTableOrderingComposer,
-    $$UserTableTableProcessedTableManager,
-    $$UserTableTableInsertCompanionBuilder,
-    $$UserTableTableUpdateCompanionBuilder> {
+    $$UserTableTableAnnotationComposer,
+    $$UserTableTableCreateCompanionBuilder,
+    $$UserTableTableUpdateCompanionBuilder,
+    (
+      UserTableData,
+      BaseReferences<_$MyDatabase, $UserTableTable, UserTableData>
+    ),
+    UserTableData,
+    PrefetchHooks Function()> {
   $$UserTableTableTableManager(_$MyDatabase db, $UserTableTable table)
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$UserTableTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$UserTableTableOrderingComposer(ComposerState(db, table)),
-          getChildManagerBuilder: (p) =>
-              $$UserTableTableProcessedTableManager(p),
-          getUpdateCompanionBuilder: ({
+          createFilteringComposer: () =>
+              $$UserTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UserTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UserTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<User?> user = const Value.absent(),
           }) =>
@@ -505,7 +603,7 @@ class $$UserTableTableTableManager extends RootTableManager<
             id: id,
             user: user,
           ),
-          getInsertCompanionBuilder: ({
+          createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<User?> user = const Value.absent(),
           }) =>
@@ -513,54 +611,32 @@ class $$UserTableTableTableManager extends RootTableManager<
             id: id,
             user: user,
           ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
         ));
 }
 
-class $$UserTableTableProcessedTableManager extends ProcessedTableManager<
+typedef $$UserTableTableProcessedTableManager = ProcessedTableManager<
     _$MyDatabase,
     $UserTableTable,
     UserTableData,
     $$UserTableTableFilterComposer,
     $$UserTableTableOrderingComposer,
-    $$UserTableTableProcessedTableManager,
-    $$UserTableTableInsertCompanionBuilder,
-    $$UserTableTableUpdateCompanionBuilder> {
-  $$UserTableTableProcessedTableManager(super.$state);
-}
+    $$UserTableTableAnnotationComposer,
+    $$UserTableTableCreateCompanionBuilder,
+    $$UserTableTableUpdateCompanionBuilder,
+    (
+      UserTableData,
+      BaseReferences<_$MyDatabase, $UserTableTable, UserTableData>
+    ),
+    UserTableData,
+    PrefetchHooks Function()>;
 
-class $$UserTableTableFilterComposer
-    extends FilterComposer<_$MyDatabase, $UserTableTable> {
-  $$UserTableTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
-
-  ColumnWithTypeConverterFilters<User?, User, String> get user =>
-      $state.composableBuilder(
-          column: $state.table.user,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
-}
-
-class $$UserTableTableOrderingComposer
-    extends OrderingComposer<_$MyDatabase, $UserTableTable> {
-  $$UserTableTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-
-  ColumnOrderings<String> get user => $state.composableBuilder(
-      column: $state.table.user,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
-}
-
-class _$MyDatabaseManager {
+class $MyDatabaseManager {
   final _$MyDatabase _db;
-  _$MyDatabaseManager(this._db);
+  $MyDatabaseManager(this._db);
   $$SettingTableTableTableManager get settingTable =>
       $$SettingTableTableTableManager(_db, _db.settingTable);
   $$UserTableTableTableManager get userTable =>
