@@ -12,19 +12,19 @@ import 'package:position/src/modules/auth/db/user/user.converter.dart';
 import 'package:position/src/modules/auth/db/user/user.dao.dart';
 import 'package:position/src/modules/auth/db/user/user.table.dart';
 import 'package:position/src/modules/auth/models/user_model/user.dart';
+import 'package:position/src/modules/categories/db/category.converter.dart';
+import 'package:position/src/modules/categories/db/category.dao.dart';
+import 'package:position/src/modules/categories/db/category.table.dart';
+import 'package:position/src/modules/categories/models/categories_model/category.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'db.g.dart';
 
 // Annotation pour indiquer que cette classe est une base de données Drift
-@DriftDatabase(tables: [
-  SettingTable,
-  UserTable,
-], daos: [
-  SettingDao,
-  UserDao,
-])
+@DriftDatabase(
+    tables: [SettingTable, UserTable, CategoryTable],
+    daos: [SettingDao, UserDao, CategoryDao])
 class MyDatabase extends _$MyDatabase {
   // Constructeur pour spécifier l'emplacement de la base de données
   MyDatabase() : super(_openConnection());

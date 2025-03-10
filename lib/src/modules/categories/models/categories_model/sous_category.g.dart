@@ -1,0 +1,24 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'sous_category.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+SousCategory _$SousCategoryFromJson(Map<String, dynamic> json) => SousCategory(
+      id: (json['id'] as num?)?.toInt(),
+      nom: json['nom'] as String?,
+      logourl: json['logourl'],
+      logourlmap: json['logourlmap'],
+      color: json['color'],
+    );
+
+Map<String, dynamic> _$SousCategoryToJson(SousCategory instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'nom': instance.nom,
+      'logourl': instance.logourl,
+      'logourlmap': instance.logourlmap,
+      'color': instance.color,
+    };

@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("I already have an account"),
         "appname": MessageLookupByLibrary.simpleMessage("Position"),
         "askAccess": MessageLookupByLibrary.simpleMessage("Request access"),
+        "close": MessageLookupByLibrary.simpleMessage("Close : "),
+        "closed": MessageLookupByLibrary.simpleMessage("Closed"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "connexion": MessageLookupByLibrary.simpleMessage("Login"),
@@ -51,6 +53,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Enter your email address or username"),
         "hintPasswordText":
             MessageLookupByLibrary.simpleMessage("Enter your password"),
+        "hintSearch": MessageLookupByLibrary.simpleMessage("Search"),
         "invalidId":
             MessageLookupByLibrary.simpleMessage("Phone or Email Invalid"),
         "invalidMail": MessageLookupByLibrary.simpleMessage("Invalid Email"),
@@ -71,6 +74,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "noAccount": MessageLookupByLibrary.simpleMessage("No Account yet?  "),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("No internet connection"),
+        "open": MessageLookupByLibrary.simpleMessage("Open"),
+        "opennow": MessageLookupByLibrary.simpleMessage("Open Now : "),
         "or": MessageLookupByLibrary.simpleMessage("- OR -"),
         "passError":
             MessageLookupByLibrary.simpleMessage("Different passwords"),
@@ -86,6 +91,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "resetPassword": MessageLookupByLibrary.simpleMessage("Reset Password"),
         "resetsuccess":
             MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "search": MessageLookupByLibrary.simpleMessage(
+            "Search for an establishment, a place..."),
+        "searcherror": MessageLookupByLibrary.simpleMessage("Load error"),
+        "searchnotfound":
+            MessageLookupByLibrary.simpleMessage("No results found"),
         "sendResetLink":
             MessageLookupByLibrary.simpleMessage("Send a reset link"),
         "serverError":

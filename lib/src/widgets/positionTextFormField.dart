@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:position/src/core/utils/colors.dart';
+import 'package:position/src/core/utils/sizes.dart';
 
 class PositionTextFormField extends StatefulWidget {
   const PositionTextFormField(
       {super.key,
       required this.boxDecorationColor,
       required this.textController,
-      required this.textSize,
       required this.hintText,
       required this.labelText,
       required this.suffixIcon,
@@ -18,7 +18,6 @@ class PositionTextFormField extends StatefulWidget {
       required this.keyboardType});
   final Color boxDecorationColor;
   final TextEditingController textController;
-  final double textSize;
   final String hintText;
   final String labelText;
   final IconData suffixIcon;
@@ -44,17 +43,16 @@ class _PositionTextFormFieldState extends State<PositionTextFormField> {
         obscureText: widget.obscureText,
         autovalidateMode: AutovalidateMode.always,
         keyboardType: TextInputType.text,
-        style: TextStyle(fontFamily: "OpenSans", fontSize: widget.textSize),
+        style: Theme.of(context).textTheme.bodyMedium,
         autocorrect: false,
         cursorColor: primaryColor,
-        cursorHeight: 20,
+        cursorHeight: cursorHeight,
         decoration: InputDecoration(
           labelText: widget.labelText,
-          labelStyle: TextStyle(
-            fontFamily: "OpenSans",
-            fontSize: widget.textSize,
-            color: greyColor,
-          ),
+          labelStyle: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: greyColor),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: widget.boxDecorationColor),
           ),

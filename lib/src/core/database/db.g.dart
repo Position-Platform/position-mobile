@@ -373,18 +373,210 @@ class UserTableCompanion extends UpdateCompanion<UserTableData> {
   }
 }
 
+class $CategoryTableTable extends CategoryTable
+    with TableInfo<$CategoryTableTable, CategoryTableData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CategoryTableTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  @override
+  late final GeneratedColumnWithTypeConverter<Category?, String> category =
+      GeneratedColumn<String>('category', aliasedName, true,
+              type: DriftSqlType.string, requiredDuringInsert: false)
+          .withConverter<Category?>($CategoryTableTable.$convertercategoryn);
+  @override
+  List<GeneratedColumn> get $columns => [id, category];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'category_table';
+  @override
+  VerificationContext validateIntegrity(Insertable<CategoryTableData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CategoryTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CategoryTableData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      category: $CategoryTableTable.$convertercategoryn.fromSql(attachedDatabase
+          .typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])),
+    );
+  }
+
+  @override
+  $CategoryTableTable createAlias(String alias) {
+    return $CategoryTableTable(attachedDatabase, alias);
+  }
+
+  static TypeConverter<Category, String> $convertercategory =
+      const CategoryConverter();
+  static TypeConverter<Category?, String?> $convertercategoryn =
+      NullAwareTypeConverter.wrap($convertercategory);
+}
+
+class CategoryTableData extends DataClass
+    implements Insertable<CategoryTableData> {
+  final int id;
+  final Category? category;
+  const CategoryTableData({required this.id, this.category});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(
+          $CategoryTableTable.$convertercategoryn.toSql(category));
+    }
+    return map;
+  }
+
+  CategoryTableCompanion toCompanion(bool nullToAbsent) {
+    return CategoryTableCompanion(
+      id: Value(id),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+    );
+  }
+
+  factory CategoryTableData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CategoryTableData(
+      id: serializer.fromJson<int>(json['id']),
+      category: serializer.fromJson<Category?>(json['category']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'category': serializer.toJson<Category?>(category),
+    };
+  }
+
+  CategoryTableData copyWith(
+          {int? id, Value<Category?> category = const Value.absent()}) =>
+      CategoryTableData(
+        id: id ?? this.id,
+        category: category.present ? category.value : this.category,
+      );
+  CategoryTableData copyWithCompanion(CategoryTableCompanion data) {
+    return CategoryTableData(
+      id: data.id.present ? data.id.value : this.id,
+      category: data.category.present ? data.category.value : this.category,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryTableData(')
+          ..write('id: $id, ')
+          ..write('category: $category')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, category);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CategoryTableData &&
+          other.id == this.id &&
+          other.category == this.category);
+}
+
+class CategoryTableCompanion extends UpdateCompanion<CategoryTableData> {
+  final Value<int> id;
+  final Value<Category?> category;
+  const CategoryTableCompanion({
+    this.id = const Value.absent(),
+    this.category = const Value.absent(),
+  });
+  CategoryTableCompanion.insert({
+    this.id = const Value.absent(),
+    this.category = const Value.absent(),
+  });
+  static Insertable<CategoryTableData> custom({
+    Expression<int>? id,
+    Expression<String>? category,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (category != null) 'category': category,
+    });
+  }
+
+  CategoryTableCompanion copyWith(
+      {Value<int>? id, Value<Category?>? category}) {
+    return CategoryTableCompanion(
+      id: id ?? this.id,
+      category: category ?? this.category,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(
+          $CategoryTableTable.$convertercategoryn.toSql(category.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CategoryTableCompanion(')
+          ..write('id: $id, ')
+          ..write('category: $category')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   $MyDatabaseManager get managers => $MyDatabaseManager(this);
   late final $SettingTableTable settingTable = $SettingTableTable(this);
   late final $UserTableTable userTable = $UserTableTable(this);
+  late final $CategoryTableTable categoryTable = $CategoryTableTable(this);
   late final SettingDao settingDao = SettingDao(this as MyDatabase);
   late final UserDao userDao = UserDao(this as MyDatabase);
+  late final CategoryDao categoryDao = CategoryDao(this as MyDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [settingTable, userTable];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [settingTable, userTable, categoryTable];
 }
 
 typedef $$SettingTableTableCreateCompanionBuilder = SettingTableCompanion
@@ -633,6 +825,130 @@ typedef $$UserTableTableProcessedTableManager = ProcessedTableManager<
     ),
     UserTableData,
     PrefetchHooks Function()>;
+typedef $$CategoryTableTableCreateCompanionBuilder = CategoryTableCompanion
+    Function({
+  Value<int> id,
+  Value<Category?> category,
+});
+typedef $$CategoryTableTableUpdateCompanionBuilder = CategoryTableCompanion
+    Function({
+  Value<int> id,
+  Value<Category?> category,
+});
+
+class $$CategoryTableTableFilterComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnWithTypeConverterFilters<Category?, Category, String> get category =>
+      $composableBuilder(
+          column: $table.category,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
+}
+
+class $$CategoryTableTableOrderingComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CategoryTableTableAnnotationComposer
+    extends Composer<_$MyDatabase, $CategoryTableTable> {
+  $$CategoryTableTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Category?, String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+}
+
+class $$CategoryTableTableTableManager extends RootTableManager<
+    _$MyDatabase,
+    $CategoryTableTable,
+    CategoryTableData,
+    $$CategoryTableTableFilterComposer,
+    $$CategoryTableTableOrderingComposer,
+    $$CategoryTableTableAnnotationComposer,
+    $$CategoryTableTableCreateCompanionBuilder,
+    $$CategoryTableTableUpdateCompanionBuilder,
+    (
+      CategoryTableData,
+      BaseReferences<_$MyDatabase, $CategoryTableTable, CategoryTableData>
+    ),
+    CategoryTableData,
+    PrefetchHooks Function()> {
+  $$CategoryTableTableTableManager(_$MyDatabase db, $CategoryTableTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CategoryTableTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoryTableTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoryTableTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<Category?> category = const Value.absent(),
+          }) =>
+              CategoryTableCompanion(
+            id: id,
+            category: category,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<Category?> category = const Value.absent(),
+          }) =>
+              CategoryTableCompanion.insert(
+            id: id,
+            category: category,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CategoryTableTableProcessedTableManager = ProcessedTableManager<
+    _$MyDatabase,
+    $CategoryTableTable,
+    CategoryTableData,
+    $$CategoryTableTableFilterComposer,
+    $$CategoryTableTableOrderingComposer,
+    $$CategoryTableTableAnnotationComposer,
+    $$CategoryTableTableCreateCompanionBuilder,
+    $$CategoryTableTableUpdateCompanionBuilder,
+    (
+      CategoryTableData,
+      BaseReferences<_$MyDatabase, $CategoryTableTable, CategoryTableData>
+    ),
+    CategoryTableData,
+    PrefetchHooks Function()>;
 
 class $MyDatabaseManager {
   final _$MyDatabase _db;
@@ -641,4 +957,6 @@ class $MyDatabaseManager {
       $$SettingTableTableTableManager(_db, _db.settingTable);
   $$UserTableTableTableManager get userTable =>
       $$UserTableTableTableManager(_db, _db.userTable);
+  $$CategoryTableTableTableManager get categoryTable =>
+      $$CategoryTableTableTableManager(_db, _db.categoryTable);
 }

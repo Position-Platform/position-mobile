@@ -3,17 +3,11 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/modules/app/bloc/app_bloc.dart';
 
 class PositionChooseLanguage extends StatefulWidget {
-  const PositionChooseLanguage(
-      {super.key,
-      required this.appLocale,
-      required this.textSize,
-      required this.appBloc});
-  final Locale appLocale;
-  final double textSize;
-  final AppBloc appBloc;
+  const PositionChooseLanguage({super.key, required this.selectLanguage});
+
+  final Function(String language) selectLanguage;
 
   @override
   State<PositionChooseLanguage> createState() => _PositionChooseLanguageState();
@@ -22,6 +16,7 @@ class PositionChooseLanguage extends StatefulWidget {
 class _PositionChooseLanguageState extends State<PositionChooseLanguage> {
   @override
   Widget build(BuildContext context) {
+    final Locale appLocale = Localizations.localeOf(context);
     List<String> languagesItems = [
       'Français',
       'English',
@@ -41,14 +36,13 @@ class _PositionChooseLanguageState extends State<PositionChooseLanguage> {
         ),
         isExpanded: false,
         hint: Text(
-          widget.appLocale.languageCode == "fr"
-              ? languagesItems[0]
-              : languagesItems[1],
-          style: TextStyle(
-              fontSize: widget.textSize,
-              color: whiteColor,
-              fontFamily: "OpenSans"),
-        ),
+            appLocale.languageCode == "fr"
+                ? languagesItems[0]
+                : languagesItems[1],
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: whiteColor)),
         iconStyleData: const IconStyleData(
           icon: Icon(
             Icons.arrow_drop_down,
@@ -71,27 +65,23 @@ class _PositionChooseLanguageState extends State<PositionChooseLanguage> {
                   value: item,
                   child: Text(
                     item,
-                    style: TextStyle(
-                        fontSize: widget.textSize,
-                        color: whiteColor,
-                        fontFamily: "OpenSans"),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: whiteColor),
                   ),
                 ))
             .toList(),
         validator: (value) {
           if (value == null) {
-            return widget.appLocale.languageCode == "fr"
+            return appLocale.languageCode == "fr"
                 ? languagesItems[0]
                 : languagesItems[1];
           }
           return null;
         },
         onChanged: (value) {
-          if (value == "Français") {
-            widget.appBloc.add(const ChangeLanguage(Locale("fr", "FR")));
-          } else {
-            widget.appBloc.add(const ChangeLanguage(Locale("en", "US")));
-          }
+          widget.selectLanguage(value!);
         },
         onSaved: (value) {
           // selectedValue = value.toString();

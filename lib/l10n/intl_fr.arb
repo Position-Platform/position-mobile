@@ -54,5 +54,13 @@
   "error": "Une erreur est survenue",
   "resetsuccess" : "reinitialisation effectuée",
   "loading": "Chargement...",
-  "maintenance": "Votre application est en cours de maintenance. Reessayez plus tard"
+  "maintenance": "Votre application est en cours de maintenance. Reessayez plus tard",
+  "search": "Rechercher un établissement, un lieu...",
+  "opennow": "Ouvert Maintenant : ",
+  "close": "Fermé : ",
+  "open": "Ouvert",
+  "closed": "Fermé",
+  "searcherror": "Erreur de Chargement",
+  "searchnotfound": "Aucun resultat trouvé",
+   "hintSearch": "Rechercher"
 }

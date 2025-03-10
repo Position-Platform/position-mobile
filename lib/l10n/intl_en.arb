@@ -55,5 +55,13 @@
   "error": "Error",
   "resetsuccess" : "Password reset successful",
   "loading": "Loading...",
-  "maintenance": "Your application is being maintained. Try again later"
+  "maintenance": "Your application is being maintained. Try again later",
+  "search": "Search for an establishment, a place...",
+  "opennow": "Open Now : ",
+  "close": "Close : ",
+  "open": "Open",
+  "closed": "Closed",
+  "searcherror": "Load error",
+  "searchnotfound": "No results found",
+   "hintSearch": "Search"
 }

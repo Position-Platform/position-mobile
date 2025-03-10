@@ -28,6 +28,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("J\'ai déja un compte"),
         "appname": MessageLookupByLibrary.simpleMessage("Position"),
         "askAccess": MessageLookupByLibrary.simpleMessage("Demandez l\'access"),
+        "close": MessageLookupByLibrary.simpleMessage("Fermé : "),
+        "closed": MessageLookupByLibrary.simpleMessage("Fermé"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirmer le Mot de Passe"),
         "connexion": MessageLookupByLibrary.simpleMessage("Connexion"),
@@ -53,6 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Entrez votre identifiant ou votre email"),
         "hintPasswordText":
             MessageLookupByLibrary.simpleMessage("Entrez votre mot de passe"),
+        "hintSearch": MessageLookupByLibrary.simpleMessage("Rechercher"),
         "invalidId":
             MessageLookupByLibrary.simpleMessage("Téléphone ou Email Invalide"),
         "invalidMail": MessageLookupByLibrary.simpleMessage("Email Invalide"),
@@ -78,6 +81,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Pas encore de Compte?  "),
         "noInternet":
             MessageLookupByLibrary.simpleMessage("Pas de connexion internet"),
+        "open": MessageLookupByLibrary.simpleMessage("Ouvert"),
+        "opennow": MessageLookupByLibrary.simpleMessage("Ouvert Maintenant : "),
         "or": MessageLookupByLibrary.simpleMessage("- OU -"),
         "passError":
             MessageLookupByLibrary.simpleMessage("Mots de passes differents"),
@@ -94,6 +99,12 @@ class MessageLookup extends MessageLookupByLibrary {
             "Reinitialiser le Mot de Passe"),
         "resetsuccess":
             MessageLookupByLibrary.simpleMessage("reinitialisation effectuée"),
+        "search": MessageLookupByLibrary.simpleMessage(
+            "Rechercher un établissement, un lieu..."),
+        "searcherror":
+            MessageLookupByLibrary.simpleMessage("Erreur de Chargement"),
+        "searchnotfound":
+            MessageLookupByLibrary.simpleMessage("Aucun resultat trouvé"),
         "sendResetLink": MessageLookupByLibrary.simpleMessage(
             "Envoyer un lien de reinitialisation"),
         "serverError":

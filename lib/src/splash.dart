@@ -19,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(whiteColor);
+    changeStatusColor(Theme.of(context).colorScheme.surface);
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: EdgeInsets.all(fixPadding),
         child: Center(

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:position/generated/l10n.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/core/utils/sizes.dart';
 import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/auth/blocs/register/register_bloc.dart';
@@ -99,9 +98,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(whiteColor);
+    changeStatusColor(Theme.of(context).colorScheme.surface);
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: BlocListener<RegisterBloc, RegisterState>(
           listener: (context, state) {
@@ -163,7 +162,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(color: whiteColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -174,7 +174,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _nameController,
-                            textSize: textSize,
                             hintText:
                                 PositionLocalizations.of(context).username,
                             labelText:
@@ -189,7 +188,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _emailController,
-                            textSize: textSize,
                             hintText: PositionLocalizations.of(context).email,
                             labelText: PositionLocalizations.of(context).email,
                             suffixIcon: Icons.email,
@@ -200,10 +198,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidMail,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -212,7 +210,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _phoneController,
-                            textSize: textSize,
                             hintText: PositionLocalizations.of(context).phone,
                             labelText: PositionLocalizations.of(context).phone,
                             suffixIcon: Icons.email,
@@ -223,10 +220,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidPhone,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -235,7 +232,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _passwordController,
-                            textSize: textSize,
                             hintText:
                                 PositionLocalizations.of(context).password,
                             labelText:
@@ -255,10 +251,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidPass,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -267,7 +263,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _cpasswordController,
-                            textSize: textSize,
                             hintText: PositionLocalizations.of(context)
                                 .confirmPassword,
                             labelText: PositionLocalizations.of(context)
@@ -287,10 +282,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidPass,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -305,7 +300,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             textColor: whiteColor,
                             buttonText:
                                 PositionLocalizations.of(context).register,
-                            textSize: textSize,
                             onPressed: isRegisterButtonEnabled(state)
                                 ? _onFormSubmitted
                                 : null),
@@ -318,7 +312,15 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-      bottomSheet: PositionBottomSheet(appBloc: _appBloc!, textSize: textSize),
+      bottomSheet: PositionBottomSheet(
+        selectLanguage: (language) {
+          if (language == "Français") {
+            _appBloc?.add(const ChangeLanguage(Locale("fr", "FR")));
+          } else {
+            _appBloc?.add(const ChangeLanguage(Locale("en", "US")));
+          }
+        },
+      ),
     );
   }
 }

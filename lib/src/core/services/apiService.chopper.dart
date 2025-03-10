@@ -183,4 +183,79 @@ final class _$ApiService extends ApiService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> getcategories() {
+    final Uri $url = Uri.parse('${apiUrl}/api/categories');
+    final Map<String, String> $headers = {
+      'Accept': 'application/json',
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getcategoriesbyid(int idCategorie) {
+    final Uri $url = Uri.parse('${apiUrl}/api/categories/${idCategorie}');
+    final Map<String, String> $headers = {
+      'Accept': 'application/json',
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> updatecategoriebyid(
+    String token,
+    int idCategorie,
+    Map<String, dynamic> body,
+  ) {
+    final Uri $url = Uri.parse('${apiUrl}/api/categories/${idCategorie}');
+    final Map<String, String> $headers = {
+      'Authorization': token,
+      'Accept': 'application/json',
+    };
+    final $body = body;
+    final Request $request = Request(
+      'PUT',
+      $url,
+      client.baseUrl,
+      body: $body,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> search(
+    String query,
+    int userId,
+  ) {
+    final Uri $url = Uri.parse('${apiUrl}/api/search/etablissements');
+    final Map<String, dynamic> $params = <String, dynamic>{
+      'q': query,
+      'user_id': userId,
+    };
+    final Map<String, String> $headers = {
+      'Accept': 'application/json',
+    };
+    final Request $request = Request(
+      'GET',
+      $url,
+      client.baseUrl,
+      parameters: $params,
+      headers: $headers,
+    );
+    return client.send<dynamic, dynamic>($request);
+  }
 }

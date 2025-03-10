@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:position/src/core/utils/colors.dart';
+import 'package:position/src/core/utils/sizes.dart';
 
 class AppThemes {
   // Définit les styles de texte partagés entre les thèmes clair et foncé
   static const _textTheme = TextTheme(
     bodyLarge: TextStyle(
       fontFamily: "OpenSans-Bold",
+      fontSize: textSizeLarge,
     ),
     bodyMedium: TextStyle(
       fontFamily: "OpenSans",
+      fontSize: textSizeMedium,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: "OpenSans",
+      fontSize: textSizeSmall,
     ),
   );
 
   // Définit les objets ThemeData pour les thèmes clair et foncé
   static final appThemeData = {
     AppTheme.lightTheme: ThemeData(
+      appBarTheme: const AppBarTheme(
+        backgroundColor: whiteColor,
+        foregroundColor: whiteColor,
+        shadowColor: whiteColor,
+        surfaceTintColor: whiteColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: blackColor),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: InputBorder.none,
+        enabledBorder: InputBorder.none,
+        focusedBorder: InputBorder.none,
+        errorBorder: InputBorder.none,
+        disabledBorder: InputBorder.none,
+        outlineBorder: BorderSide.none,
+        hintStyle: TextStyle(
+          color: blackColor,
+        ),
+      ),
       scaffoldBackgroundColor: whiteColor,
       primaryColor: primaryColor,
       canvasColor: whiteColor,
@@ -23,6 +49,7 @@ class AppThemes {
       textTheme: _textTheme.copyWith(
         bodyLarge: _textTheme.bodyLarge?.copyWith(color: blackColor),
         bodyMedium: _textTheme.bodyMedium?.copyWith(color: blackColor),
+        bodySmall: _textTheme.bodySmall?.copyWith(color: blackColor),
       ),
       textSelectionTheme:
           const TextSelectionThemeData(cursorColor: accentColor),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:position/generated/l10n.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/core/utils/sizes.dart';
 import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/auth/blocs/login/login_bloc.dart';
@@ -69,9 +68,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(whiteColor);
+    changeStatusColor(Theme.of(context).colorScheme.surface);
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
@@ -132,7 +131,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(color: whiteColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface),
                     child: Column(
                       children: [
                         const PositionAuthHeader(),
@@ -142,7 +142,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _emailController,
-                            textSize: textSize,
                             hintText: PositionLocalizations.of(context).email,
                             labelText: PositionLocalizations.of(context).email,
                             suffixIcon: Icons.email,
@@ -159,7 +158,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             textColor: whiteColor,
                             buttonText:
                                 PositionLocalizations.of(context).sendResetLink,
-                            textSize: textSize,
                             onPressed: _onForgotPasswordSubmitted),
                       ],
                     ),
@@ -170,7 +168,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           ),
         ),
       ),
-      bottomSheet: PositionBottomSheet(appBloc: _appBloc!, textSize: textSize),
+      bottomSheet: PositionBottomSheet(
+        selectLanguage: (language) {
+          if (language == "Français") {
+            _appBloc?.add(const ChangeLanguage(Locale("fr", "FR")));
+          } else {
+            _appBloc?.add(const ChangeLanguage(Locale("en", "US")));
+          }
+        },
+      ),
     );
   }
 }

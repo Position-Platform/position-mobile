@@ -33,10 +33,7 @@ class _PositionErrorWidgetState extends State<PositionErrorWidget> {
           Text(
             widget.message,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: "OpenSans"),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(
             height: 40,
@@ -56,7 +53,10 @@ class _PositionErrorWidgetState extends State<PositionErrorWidget> {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
                   PositionLocalizations.of(context).tryAgain,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: whiteColor),
                   textAlign: TextAlign.center,
                 ),
               ))

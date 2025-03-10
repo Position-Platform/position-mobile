@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:position/generated/l10n.dart';
 import 'package:position/src/core/di/di.dart';
 import 'package:position/src/core/utils/colors.dart';
-import 'package:position/src/core/utils/sizes.dart';
 import 'package:position/src/core/utils/tools.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
 import 'package:position/src/modules/auth/blocs/auth/auth_bloc.dart';
@@ -82,9 +81,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    changeStatusColor(whiteColor);
+    changeStatusColor(Theme.of(context).colorScheme.surface);
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         child: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
@@ -131,7 +130,8 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(color: whiteColor),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -142,7 +142,6 @@ class _LoginPageState extends State<LoginPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _identifiantController,
-                            textSize: textSize,
                             hintText:
                                 PositionLocalizations.of(context).hintIdText,
                             labelText:
@@ -155,10 +154,10 @@ class _LoginPageState extends State<LoginPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidId,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -167,7 +166,6 @@ class _LoginPageState extends State<LoginPage> {
                         PositionTextFormField(
                             boxDecorationColor: grey97,
                             textController: _passwordController,
-                            textSize: textSize,
                             hintText: PositionLocalizations.of(context)
                                 .hintPasswordText,
                             labelText: PositionLocalizations.of(context)
@@ -186,10 +184,10 @@ class _LoginPageState extends State<LoginPage> {
                             ? Text(
                                 PositionLocalizations.of(context).invalidPass,
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    color: redColor,
-                                    fontSize: 11,
-                                    fontFamily: "OpenSans"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: redColor),
                               )
                             : const Text(""),
                         const SizedBox(
@@ -214,13 +212,15 @@ class _LoginPageState extends State<LoginPage> {
                             margin: const EdgeInsets.only(left: 50, right: 150),
                             child: Text(
                                 PositionLocalizations.of(context).forgotPass,
-                                style: TextStyle(
-                                  fontFamily: 'OpenSans-Bold',
-                                  color: primaryColor,
-                                  fontSize: textSize,
-                                  fontWeight: FontWeight.w700,
-                                  fontStyle: FontStyle.normal,
-                                )),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontFamily: "OpenSans-Bold",
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontStyle: FontStyle.normal,
+                                    )),
                           ),
                         ),
                         const SizedBox(
@@ -232,11 +232,10 @@ class _LoginPageState extends State<LoginPage> {
                             PositionValideButton(
                                 width: 130,
                                 height: 35,
-                                color: whiteColor,
+                                color: Theme.of(context).colorScheme.surface,
                                 textColor: primaryColor,
                                 buttonText: PositionLocalizations.of(context)
                                     .createAccount,
-                                textSize: textSize,
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -263,7 +262,6 @@ class _LoginPageState extends State<LoginPage> {
                                 textColor: whiteColor,
                                 buttonText:
                                     PositionLocalizations.of(context).connexion,
-                                textSize: textSize,
                                 onPressed: isLoginButtonEnabled(state)
                                     ? _onFormSubmitted
                                     : null)
@@ -305,7 +303,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         PositionSocialAuthButtons(
                           setting: widget.setting,
-                          loginBloc: _loginBloc!,
+                          onLoginWithGooglePressed: () {
+                            _loginBloc!.add(LoginWithGooglePressed());
+                          },
+                          onLoginWithApplePressed: () {
+                            _loginBloc!.add(LoginWithApplePressed());
+                          },
+                          onLoginWithFacebookPressed: () {},
+                          onLoginWithOsmPressed: () {},
                         ),
                         const SizedBox(
                           height: 80,
@@ -319,7 +324,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      bottomSheet: PositionBottomSheet(appBloc: _appBloc!, textSize: textSize),
+      bottomSheet: PositionBottomSheet(
+        selectLanguage: (language) {
+          if (language == "Français") {
+            _appBloc?.add(const ChangeLanguage(Locale("fr", "FR")));
+          } else {
+            _appBloc?.add(const ChangeLanguage(Locale("en", "US")));
+          }
+        },
+      ),
     );
   }
 }

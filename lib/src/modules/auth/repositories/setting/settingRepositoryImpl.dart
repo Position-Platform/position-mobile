@@ -21,29 +21,50 @@ class SettingRepositoryImpl implements SettingRepository {
 
   @override
   Future<Result<Setting>> getappsettings() async {
-    bool isConnected = await networkInfoHelper!.isConnected();
-    if (isConnected) {
-      try {
-        final Response response = await settingApiService!.getappsettings();
+    try {
+      // Step 1: Retrieve settings from local database
+      final localSetting = await settingDao!.getSetting();
 
-        var model = SettingModel.fromJson(response.body);
+      // Step 2: Check internet connectivity
+      bool isConnected = await networkInfoHelper!.isConnected();
+      if (isConnected) {
+        try {
+          // Step 3: Fetch settings from API
+          final Response response = await settingApiService!.getappsettings();
+          var remoteModel = SettingModel.fromJson(response.body);
 
-        // check if setting is already in db
-        final setting = await settingDao!.getSetting();
-
-        if (setting != null) {
-          await settingDao!.updateSetting(SettingTableCompanion(
-              id: const Value(1), setting: Value(model.data!.setting)));
-        } else {
-          await settingDao!.addSetting(SettingTableCompanion(
-              id: const Value(1), setting: Value(model.data!.setting)));
+          // Step 4: Update local database if there is a change
+          if (localSetting == null ||
+              localSetting.setting != remoteModel.data!.setting) {
+            // If localSetting is null or different from remote, update the database
+            if (localSetting != null) {
+              await settingDao!.updateSetting(SettingTableCompanion(
+                  id: const Value(1),
+                  setting: Value(remoteModel.data!.setting)));
+            } else {
+              await settingDao!.addSetting(SettingTableCompanion(
+                  id: const Value(1),
+                  setting: Value(remoteModel.data!.setting)));
+            }
+            return Result(success: remoteModel.data!.setting);
+          } else {
+            // No change in data
+            return Result(success: localSetting.setting);
+          }
+        } catch (e) {
+          // Step 5: Handle server error
+          return Result(error: ServerError());
         }
-        return Result(success: model.data!.setting);
-      } catch (e) {
-        return Result(error: ServerError());
+      } else {
+        // Step 6: Handle no internet error
+        if (localSetting != null) {
+          return Result(success: localSetting.setting);
+        } else {
+          return Result(error: NoInternetError());
+        }
       }
-    } else {
-      return Result(error: NoInternetError());
+    } catch (e) {
+      return Result(error: ServerError());
     }
   }
 }
