@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: "zulu"
-          java-version: "11"
+          java-version: "17"
 
       # Create Env File
       - name: "Create env file"
@@ -46,10 +46,10 @@ jobs:
       # - run: flutter test
 
       # Build apk.
-      # - run: flutter build apk
+      - run: flutter build apk
 
       # Build appbundle.
-      # - run: flutter build appbundle
+      - run: flutter build appbundle
 
       # Build Ios
-      # - run: flutter build ios --release --no-codesign
+      - run: flutter build ios --release --no-codesign

@@ -543,10 +543,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: "8cf40eebf5dec866a6d1956ad7b4f7016e6c0cc69847ab946833b7d43743809f"
+      sha256: "5a1e6fb2c0561958d7e4c33574674bda7b77caaca7a33b758876956f2902eea3"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.19"
+    version: "2.0.27"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -1113,10 +1113,10 @@ packages:
     dependency: transitive
     description:
       name: pointer_interceptor
-      sha256: d0a8e660d1204eaec5bd34b34cc92174690e076d2e4f893d9d68c486a13b07c4
+      sha256: "57210410680379aea8b1b7ed6ae0c3ad349bfd56fe845b8ea934a53344b9d523"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.1+1"
+    version: "0.10.1+2"
   pointer_interceptor_ios:
     dependency: transitive
     description:
