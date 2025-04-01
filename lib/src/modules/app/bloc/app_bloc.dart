@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/core/utils/themes.dart';
 
 part 'app_event.dart';
@@ -8,8 +9,9 @@ part 'app_state.dart';
 
 // La classe AppBloc étend la classe HydratedBloc pour permettre la persistance de l'état de l'application
 class AppBloc extends HydratedBloc<AppEvent, AppState> {
+  final LogService logger;
   // Le constructeur de la classe initialise l'état initial de l'application avec un thème clair et la langue française
-  AppBloc()
+  AppBloc({required this.logger})
       : super(AppState(AppThemes.appThemeData[AppTheme.lightTheme],
             const Locale('fr', 'FR'))) {
     // Les méthodes _changeTheme et _changeLanguage sont appelées lorsqu'un événement ChangeTheme ou ChangeLanguage est émis
@@ -18,12 +20,16 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
   }
 
   // La méthode _changeTheme met à jour l'état de l'application avec un nouveau thème
-  void _changeTheme(ChangeTheme event, Emitter<AppState> emit) =>
-      emit(AppState(AppThemes.appThemeData[event.appTheme], state.locale));
+  void _changeTheme(ChangeTheme event, Emitter<AppState> emit) {
+    emit(AppState(AppThemes.appThemeData[event.appTheme], state.locale));
+    logger.info('ChangeTheme: ${event.appTheme}');
+  }
 
   // La méthode _changeLanguage met à jour l'état de l'application avec une nouvelle langue
-  void _changeLanguage(ChangeLanguage event, Emitter<AppState> emit) =>
-      emit(AppState(state.themeData, event.locale));
+  void _changeLanguage(ChangeLanguage event, Emitter<AppState> emit) {
+    emit(AppState(state.themeData, event.locale));
+    logger.info('ChangeLanguage: ${event.locale}');
+  }
 
   // La méthode fromJson prend un objet JSON et renvoie une instance de la classe AppState
   @override
@@ -41,6 +47,8 @@ class AppBloc extends HydratedBloc<AppEvent, AppState> {
       locale = json['locale'] as bool
           ? const Locale('fr', 'FR')
           : const Locale('en', 'US');
+
+      logger.info('fromJson: theme: $theme, locale: $locale');
 
       return AppState(theme, locale);
     } catch (e) {

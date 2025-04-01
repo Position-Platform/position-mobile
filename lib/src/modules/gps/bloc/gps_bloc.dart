@@ -6,13 +6,15 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:position/src/core/services/log.service.dart';
 
 part 'gps_event.dart';
 part 'gps_state.dart';
 
 class GpsBloc extends Bloc<GpsEvent, GpsState> {
   StreamSubscription? gpsServiceSubscription;
-  GpsBloc()
+  LogService logger;
+  GpsBloc({required this.logger})
       : super(const GpsState(
             isGpsEnabled: false, isGpsPermissionGranted: false)) {
     on<GpsAndPermissionEvent>((event, emit) => emit(state.copyWith(
@@ -23,6 +25,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
 
   Future<void> _init() async {
     print('GpsInitialisation ');
+    logger.info('GpsInitialisation ');
     final gpsInitStatus = await Future.wait([
       _chechGpsStatus(),
       _isPermissionGranted(),
@@ -31,12 +34,15 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     add(GpsAndPermissionEvent(
         isGpsEnabled: gpsInitStatus[0],
         isGpsPermissionGranted: gpsInitStatus[1]));
+
+    logger.info('GpsInitialisation $gpsInitStatus');
   }
 
   Future<bool> _isPermissionGranted() async {
     final isGranted = await Permission.location.isGranted;
 
     print('IsPermissionGranted $isGranted');
+    logger.info('IsPermissionGranted $isGranted');
     return isGranted;
   }
 
@@ -51,6 +57,7 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
           isGpsPermissionGranted: state.isGpsPermissionGranted));
     });
     print('GpsStatusEnable $isEnable');
+    logger.info('GpsStatusEnable $isEnable');
     return isEnable;
   }
 

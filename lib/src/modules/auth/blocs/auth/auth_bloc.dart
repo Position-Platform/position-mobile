@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
 import 'package:position/src/modules/auth/repositories/setting/settingRepository.dart';
 import 'package:position/src/core/helpers/sharedpreferences.dart';
@@ -13,11 +14,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository? authRepository;
   final SettingRepository? settingRepository;
   final SharedPreferencesHelper? sharedPreferencesHelper;
+  final LogService logger;
 
   AuthBloc(
       {this.authRepository,
       this.sharedPreferencesHelper,
-      this.settingRepository})
+      this.settingRepository,
+      required this.logger})
       : super(AuthInitial()) {
     on<AuthStarted>(_authStarted);
     on<AuthLoggedIn>(_authLoggedIn);
@@ -37,6 +40,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final token = await sharedPreferencesHelper!.getToken();
     final setting = await settingRepository!.getappsettings();
 
+    logger.info(
+        "isSignedIn: $isSignedIn, firstOpen: $firstOpen, token: $token, setting: ${setting.success!.maintenanceMode}");
+
     if (firstOpen) {
       return emit(AuthFirstOpen());
     } else if (setting.success!.maintenanceMode!) {
@@ -44,12 +50,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       if (isSignedIn) {
         try {
+          // loguer l'utilisateur
+          logger.info("User is signed in with token: $token");
           final userResult = await authRepository!.getuser(token!);
+          // loguer les parametres de l'utilisateur
+          logger.info("User data: ${userResult.success}");
           return emit(AuthSuccess(userResult.success!, setting.success!));
         } catch (e) {
+          // loguer l'erreur
+          logger.error("Error getting user data: $e");
           return emit(AuthServerError());
         }
       } else {
+        // loguer l'erreur
+        logger.error("User is not signed in, redirecting to login page");
         return emit(AuthFailure(setting.success!));
       }
     }
@@ -69,7 +83,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return emit(AuthMaintenance());
     } else {
       try {
+        // loguer l'utilisateur
+        logger.info("User is signed in with token: $token");
         final userResult = await authRepository!.getuser(token!);
+        // loguer les parametres de l'utilisateur
+        logger.info("User data: ${userResult.success}");
         return emit(AuthSuccess(userResult.success!, setting.success!));
       } catch (e) {
         return emit(AuthServerError());
@@ -84,6 +102,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final setting = await settingRepository!.getappsettings();
     if (setting.success!.maintenanceMode!) {
+      // loguer l'erreur
+      logger.error(
+          "Application is in maintenance mode, redirecting to maintenance page");
       return emit(AuthMaintenance());
     }
     await sharedPreferencesHelper!.setIsFirstOpen(false);
@@ -102,6 +123,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
     await authRepository!.logout(token!);
     await sharedPreferencesHelper!.deleteToken();
+    // loguer l'utilisateur
+    logger.info("User logged out with token: $token");
     return emit(AuthFailure(setting.success!));
   }
 

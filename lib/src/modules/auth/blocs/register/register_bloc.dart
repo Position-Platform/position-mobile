@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:position/src/core/helpers/sharedpreferences.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/core/utils/result.dart';
 import 'package:position/src/core/utils/validators.dart';
 import 'package:position/src/modules/auth/models/auth_model/auth_model.dart';
@@ -14,9 +15,11 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final AuthRepository? authRepository;
   final SharedPreferencesHelper? sharedPreferencesHelper;
+  final LogService logger;
   RegisterBloc({
     this.authRepository,
     this.sharedPreferencesHelper,
+    required this.logger,
   }) : super(RegisterState.initial()) {
     // Définition des événements et de leurs gestionnaires
     on<RegisterEmailChanged>(_registerEmailChanged,
@@ -84,15 +87,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ) async {
     emit(RegisterState.loading());
     try {
+      //loguer l'identifiant et le mot de passe
+      logger.info(
+          "RegisterWithCredentialsPressed: ${event.name}, ${event.email}, ${event.phone}, ${event.password}");
       // Appel de la méthode de registration du repository
       Result<AuthModel> user = await authRepository!
           .register(event.name!, event.email!, event.phone!, event.password!);
+      //loguer le token
+      logger.info("Register success with token: ${user.success!.data!.token}");
       if (user.success != null) {
+        //loguer les parametres de l'utilisateur
+        logger.info("User data: ${user.success}");
         return emit(RegisterState.success());
       } else {
+        //loguer l'erreur
+        logger.error("Register failed: ${user.success!.message}");
         return emit(RegisterState.failure());
       }
     } catch (error) {
+      //loguer l'erreur
+      logger.error("Register error: $error");
       return emit(RegisterState.failure());
     }
   }
