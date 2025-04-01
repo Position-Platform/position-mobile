@@ -46,10 +46,9 @@ jobs:
       # - run: flutter test
 
       # Build apk.
+        if: github.ref == 'refs/heads/main'
       - run: flutter build apk
 
-      # Build appbundle.
-      - run: flutter build appbundle
-
       # Build Ios
+        if: github.ref == 'refs/heads/main'
       - run: flutter build ios --release --no-codesign
