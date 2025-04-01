@@ -18,17 +18,20 @@ class PositionLocalizations {
   static PositionLocalizations? _current;
 
   static PositionLocalizations get current {
-    assert(_current != null,
-        'No instance of PositionLocalizations was loaded. Try to initialize the PositionLocalizations delegate before accessing PositionLocalizations.current.');
+    assert(
+      _current != null,
+      'No instance of PositionLocalizations was loaded. Try to initialize the PositionLocalizations delegate before accessing PositionLocalizations.current.',
+    );
     return _current!;
   }
 
   static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<PositionLocalizations> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false)
-        ? locale.languageCode
-        : locale.toString();
+    final name =
+        (locale.countryCode?.isEmpty ?? false)
+            ? locale.languageCode
+            : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
@@ -41,24 +44,23 @@ class PositionLocalizations {
 
   static PositionLocalizations of(BuildContext context) {
     final instance = PositionLocalizations.maybeOf(context);
-    assert(instance != null,
-        'No instance of PositionLocalizations present in the widget tree. Did you add PositionLocalizations.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of PositionLocalizations present in the widget tree. Did you add PositionLocalizations.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
   static PositionLocalizations? maybeOf(BuildContext context) {
     return Localizations.of<PositionLocalizations>(
-        context, PositionLocalizations);
+      context,
+      PositionLocalizations,
+    );
   }
 
   /// `Position`
   String get appname {
-    return Intl.message(
-      'Position',
-      name: 'appname',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Position', name: 'appname', desc: '', args: []);
   }
 
   /// `Un accès GPS est nécessaire`
@@ -93,32 +95,17 @@ class PositionLocalizations {
 
   /// `Passer`
   String get skip {
-    return Intl.message(
-      'Passer',
-      name: 'skip',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Passer', name: 'skip', desc: '', args: []);
   }
 
   /// `Suivant`
   String get next {
-    return Intl.message(
-      'Suivant',
-      name: 'next',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Suivant', name: 'next', desc: '', args: []);
   }
 
   /// `Allez-y`
   String get go {
-    return Intl.message(
-      'Allez-y',
-      name: 'go',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Allez-y', name: 'go', desc: '', args: []);
   }
 
   /// `Rechercher les points d'intérêt et accéder aux services essentiels de la ville`
@@ -183,12 +170,7 @@ class PositionLocalizations {
 
   /// `Reessayez`
   String get tryAgain {
-    return Intl.message(
-      'Reessayez',
-      name: 'tryAgain',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Reessayez', name: 'tryAgain', desc: '', args: []);
   }
 
   /// `Une erreur est survenue`
@@ -263,12 +245,7 @@ class PositionLocalizations {
 
   /// `Connexion...`
   String get loggin {
-    return Intl.message(
-      'Connexion...',
-      name: 'loggin',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Connexion...', name: 'loggin', desc: '', args: []);
   }
 
   /// `Un mail de reinitialisation vous a été envoyé`
@@ -343,12 +320,7 @@ class PositionLocalizations {
 
   /// `Connexion`
   String get connexion {
-    return Intl.message(
-      'Connexion',
-      name: 'connexion',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Connexion', name: 'connexion', desc: '', args: []);
   }
 
   /// `Pas encore de Compte?  `
@@ -363,12 +335,7 @@ class PositionLocalizations {
 
   /// `Mot de Passe`
   String get password {
-    return Intl.message(
-      'Mot de Passe',
-      name: 'password',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Mot de Passe', name: 'password', desc: '', args: []);
   }
 
   /// `Création du compte...`
@@ -453,22 +420,12 @@ class PositionLocalizations {
 
   /// `CONNECTEZ VOUS`
   String get login {
-    return Intl.message(
-      'CONNECTEZ VOUS',
-      name: 'login',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('CONNECTEZ VOUS', name: 'login', desc: '', args: []);
   }
 
   /// `Adresse Mail`
   String get email {
-    return Intl.message(
-      'Adresse Mail',
-      name: 'email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Adresse Mail', name: 'email', desc: '', args: []);
   }
 
   /// `Remplissez l'adresse mail`
@@ -523,12 +480,7 @@ class PositionLocalizations {
 
   /// `- OU -`
   String get or {
-    return Intl.message(
-      '- OU -',
-      name: 'or',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('- OU -', name: 'or', desc: '', args: []);
   }
 
   /// `Se Connecter avec`
@@ -543,12 +495,7 @@ class PositionLocalizations {
 
   /// `S'INSCRIRE`
   String get register {
-    return Intl.message(
-      'S\'INSCRIRE',
-      name: 'register',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('S\'INSCRIRE', name: 'register', desc: '', args: []);
   }
 
   /// `Confirmer le Mot de Passe`
@@ -583,12 +530,7 @@ class PositionLocalizations {
 
   /// `Chargement...`
   String get loading {
-    return Intl.message(
-      'Chargement...',
-      name: 'loading',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Chargement...', name: 'loading', desc: '', args: []);
   }
 
   /// `Votre application est en cours de maintenance. Reessayez plus tard`
@@ -623,32 +565,17 @@ class PositionLocalizations {
 
   /// `Fermé : `
   String get close {
-    return Intl.message(
-      'Fermé : ',
-      name: 'close',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Fermé : ', name: 'close', desc: '', args: []);
   }
 
   /// `Ouvert`
   String get open {
-    return Intl.message(
-      'Ouvert',
-      name: 'open',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Ouvert', name: 'open', desc: '', args: []);
   }
 
   /// `Fermé`
   String get closed {
-    return Intl.message(
-      'Fermé',
-      name: 'closed',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Fermé', name: 'closed', desc: '', args: []);
   }
 
   /// `Erreur de Chargement`
@@ -673,9 +600,34 @@ class PositionLocalizations {
 
   /// `Rechercher`
   String get hintSearch {
+    return Intl.message('Rechercher', name: 'hintSearch', desc: '', args: []);
+  }
+
+  /// `Les mots de passe ne correspondent pas`
+  String get passwordsDontMatch {
     return Intl.message(
-      'Rechercher',
-      name: 'hintSearch',
+      'Les mots de passe ne correspondent pas',
+      name: 'passwordsDontMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `réinitialisation du mot de passe`
+  String get passwordReset {
+    return Intl.message(
+      'réinitialisation du mot de passe',
+      name: 'passwordReset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saisir l'e-mail pour réinitialiser`
+  String get enterEmailForReset {
+    return Intl.message(
+      'Saisir l\'e-mail pour réinitialiser',
+      name: 'enterEmailForReset',
       desc: '',
       args: [],
     );

@@ -30,11 +30,12 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => _MapPageState();
 }
 
-class _MapPageState extends State<MapPage> {
-  MapBloc? _mapBloc;
-  AppBloc? _appBloc;
-  CategoriesBloc? _categoriesBloc;
+class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
+  late MapBloc _mapBloc;
+  late AppBloc _appBloc;
+  late CategoriesBloc _categoriesBloc;
   List<Category> categories = [];
+  bool _isMapInitialized = false;
 
   @override
   void initState() {
@@ -42,12 +43,78 @@ class _MapPageState extends State<MapPage> {
     _mapBloc = BlocProvider.of<MapBloc>(context);
     _categoriesBloc = BlocProvider.of<CategoriesBloc>(context);
     _appBloc = BlocProvider.of<AppBloc>(context);
-    _categoriesBloc?.add(GetCategories());
+    _categoriesBloc.add(GetCategories());
+
+    // Observer pour détecter les changements d'orientation et de taille d'écran
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    // Réagir aux changements de taille d'écran (rotation, etc.)
+    if (_isMapInitialized) {
+      // Actualiser la carte si nécessaire
+      _mapBloc.add(RefreshMapEvent());
+    }
+    super.didChangeMetrics();
+  }
+
+  void _handleMapInitialized(MapboxMap controller) {
+    _isMapInitialized = true;
+    _mapBloc.add(OnMapInitializedEvent(controller, widget.setting));
+  }
+
+  void _handleCategoryClick(Category category) {
+    _categoriesBloc.add(CategorieClick(category));
+  }
+
+  void _handleStyleSelection() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled:
+          true, // Pour un meilleur comportement sur les petits écrans
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        return PositionStyleSelection(
+          onStyleSelected: (style) {
+            _mapBloc.add(UserStyleSelectionEvent(style));
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _openSearch() async {
+    await showSearch(
+      context: context,
+      delegate: PositionMapSearchDelegate(
+        hintText: PositionLocalizations.of(context).hintSearch,
+        searchBloc: BlocProvider.of<SearchBloc>(context),
+        user: widget.user,
+      ),
+    ).then((value) {
+      if (value != null) {
+        // Traiter le résultat de recherche ici
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isLandscape = screenSize.width > screenSize.height;
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     changeStatusColor(transparent);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: MultiBlocListener(
@@ -55,129 +122,129 @@ class _MapPageState extends State<MapPage> {
           BlocListener<MapBloc, MapState>(
             listener: (context, state) {
               if (state is MapInitialized) {
-                _mapBloc?.add(GetUserLocationEvent());
+                _mapBloc.add(GetUserLocationEvent());
               }
               if (state is MapStyleSelected) {
                 if (state.style == MapboxStyles.DARK) {
-                  _appBloc!.add(const ChangeTheme(AppTheme.darkTheme));
+                  _appBloc.add(const ChangeTheme(AppTheme.darkTheme));
                 } else {
-                  _appBloc!.add(const ChangeTheme(AppTheme.lightTheme));
+                  _appBloc.add(const ChangeTheme(AppTheme.lightTheme));
                 }
               }
             },
           ),
           BlocListener<CategoriesBloc, CategoriesState>(
             listener: (context, state) {
-              if (state is CategoriesLoading) {}
               if (state is CategoriesLoaded) {
-                categories = state.categories!;
+                setState(() {
+                  categories = state.categories!;
+                });
               }
             },
           ),
         ],
         child: BlocBuilder<MapBloc, MapState>(
-          builder: (context, state) {
+          builder: (context, mapState) {
             MapboxOptions.setAccessToken(widget.setting.mapApiKey!);
-            return BlocBuilder<CategoriesBloc, CategoriesState>(
-              builder: (context, state) {
-                return Stack(
-                  children: [
-                    MapWidget(
-                      key: const ValueKey("mapWidget"),
-                      cameraOptions: CameraOptions(
-                        center: Point(
-                            coordinates: Position(
-                          0,
-                          0,
-                        )),
-                      ),
-                      styleUri: _appBloc?.state.themeData ==
-                              AppThemes.appThemeData[AppTheme.darkTheme]
-                          ? MapboxStyles.DARK
-                          : widget.setting.defaultMapStyle!,
-                      textureView: true,
-                      onMapCreated: (controller) => _mapBloc?.add(
-                          OnMapInitializedEvent(controller, widget.setting)),
-                      onStyleLoadedListener: (styleLoadedEventData) {},
-                      onLongTapListener: (coordinate) {},
-                      onTapListener: (coordinate) {},
+            return Stack(
+              children: [
+                // Carte MapBox
+                MapWidget(
+                  key: const ValueKey("mapWidget"),
+                  cameraOptions: CameraOptions(
+                    center: Point(
+                      coordinates: Position(0, 0),
                     ),
-                    SafeArea(
-                        child: Column(
-                      children: [
-                        PositionSearchBar(
-                          openDrawer: () {},
-                          openSearch: () async {
-                            await showSearch(
-                                    context: context,
-                                    delegate: PositionMapSearchDelegate(
-                                        hintText:
-                                            PositionLocalizations.of(context)
-                                                .hintSearch,
-                                        searchBloc: BlocProvider.of<SearchBloc>(
-                                            context),
-                                        user: widget.user))
-                                .then((value) {
-                              if (value != null) {}
-                            });
+                    zoom: 2, // Zoom par défaut ajouté
+                  ),
+                  styleUri: _appBloc.state.themeData ==
+                          AppThemes.appThemeData[AppTheme.darkTheme]
+                      ? MapboxStyles.DARK
+                      : widget.setting.defaultMapStyle!,
+                  textureView: true,
+                  onMapCreated: _handleMapInitialized,
+                  onStyleLoadedListener: (styleLoadedEventData) {
+                    // Traitement supplémentaire lorsque le style est chargé
+                  },
+                  onLongTapListener: (coordinate) {
+                    // Gestion du tap long
+                  },
+                  onTapListener: (coordinate) {
+                    // Gestion du tap
+                  },
+                ),
+
+                // Interface utilisateur superposée à la carte
+                SafeArea(
+                  child: Column(
+                    children: [
+                      // Barre de recherche
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 8.0),
+                        child: PositionSearchBar(
+                          openDrawer: () {
+                            // Ouvrir le tiroir de navigation
                           },
+                          openSearch: _openSearch,
                           labelSearch: PositionLocalizations.of(context).search,
-                          openProfile: () {},
+                          openProfile: () {
+                            // Ouvrir le profil
+                          },
                         ),
-                        const SizedBox(
-                          height: 5,
+                      ),
+
+                      // Widget des catégories
+                      Container(
+                        height: isLandscape
+                            ? 50
+                            : 50, // Ajustement pour le mode paysage
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: PositionCategoriesWidget(
+                          categories: categories,
+                          categoryClick: _handleCategoryClick,
                         ),
-                        PositionCategoriesWidget(
-                            categories: categories,
-                            categoryClick: (category) {
-                              _categoriesBloc?.add(CategorieClick(category));
-                            }),
-                      ],
-                    )),
-                  ],
-                );
-              },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             );
           },
         ),
       ),
-      floatingActionButton: Align(
-        alignment: Alignment.bottomRight,
-        child: Wrap(
-          direction: Axis.vertical,
+
+      // Boutons flottants
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            const Spacer(),
             PositionMapFloatongActionButton(
-                buttonTag: "layers",
-                buttonPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return PositionStyleSelection(
-                        onStyleSelected: (style) {
-                          _mapBloc?.add(UserStyleSelectionEvent(style));
-                        },
-                      );
-                    },
-                  );
-                },
-                buttonIcon: const Icon(
-                  Icons.layers,
-                  color: primaryColor,
-                )),
-            const SizedBox(
-              height: 10,
+              buttonTag: "layers",
+              buttonPressed: _handleStyleSelection,
+              buttonIcon: const Icon(
+                Icons.layers,
+                color: primaryColor,
+              ),
             ),
+            const SizedBox(height: 10),
             PositionMapFloatongActionButton(
-                buttonTag: "location",
-                buttonPressed: () {
-                  _mapBloc?.add(GetUserLocationEvent());
-                },
-                buttonIcon: SvgPicture.asset(
-                  "assets/images/svg/icon-my_location.svg",
-                )),
+              buttonTag: "location",
+              buttonPressed: () {
+                _mapBloc.add(GetUserLocationEvent());
+              },
+              buttonIcon: SvgPicture.asset(
+                "assets/images/svg/icon-my_location.svg",
+              ),
+            ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

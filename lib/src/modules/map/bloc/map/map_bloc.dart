@@ -19,6 +19,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnMapInitializedEvent>(_onInitMap);
     on<GetUserLocationEvent>(_getUserLocation);
     on<UserStyleSelectionEvent>(_userStyleSelection);
+    on<RefreshMapEvent>((event, emit) {
+      emit(MapInitial());
+    });
   }
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
