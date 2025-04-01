@@ -12,7 +12,7 @@ import google_sign_in_ios
 import path_provider_foundation
 import shared_preferences_foundation
 import sign_in_with_apple
-import sqflite
+import sqflite_darwin
 import sqlite3_flutter_libs
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
