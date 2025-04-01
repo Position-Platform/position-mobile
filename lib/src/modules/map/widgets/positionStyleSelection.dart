@@ -73,7 +73,10 @@ class _PositionStyleSelectionState extends State<PositionStyleSelection> {
                   const SizedBox(height: 8.0),
                   Text(
                     style['name'],
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontFamily: "OpenSans-Bold", fontSize: 11),
                   ),
                 ],
               ),
