@@ -31,11 +31,18 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
-  late MapBloc _mapBloc;
-  late AppBloc _appBloc;
-  late CategoriesBloc _categoriesBloc;
-  List<Category> categories = [];
+  late final MapBloc _mapBloc;
+  late final AppBloc _appBloc;
+  late final CategoriesBloc _categoriesBloc;
+  List<Category> _categories = [];
   bool _isMapInitialized = false;
+
+  // Cache des widgets constants pour éviter les reconstructions
+  late final SvgPicture _locationIcon = SvgPicture.asset(
+    "assets/images/svg/icon-my_location.svg",
+    height: 24,
+    width: 24,
+  );
 
   @override
   void initState() {
@@ -57,10 +64,14 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
   @override
   void didChangeMetrics() {
-    // Réagir aux changements de taille d'écran (rotation, etc.)
+    // Réagir aux changements de taille d'écran uniquement si la carte est initialisée
     if (_isMapInitialized) {
-      // Actualiser la carte si nécessaire
-      _mapBloc.add(RefreshMapEvent());
+      // Utiliser un délai pour éviter des actualisations trop fréquentes pendant le redimensionnement
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          _mapBloc.add(RefreshMapEvent());
+        }
+      });
     }
     super.didChangeMetrics();
   }
@@ -77,41 +88,39 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
   void _handleStyleSelection() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled:
-          true, // Pour un meilleur comportement sur les petits écrans
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (BuildContext context) {
-        return PositionStyleSelection(
-          onStyleSelected: (style) {
-            _mapBloc.add(UserStyleSelectionEvent(style));
-          },
-        );
-      },
+      builder: (context) => PositionStyleSelection(
+        onStyleSelected: (style) {
+          _mapBloc.add(UserStyleSelectionEvent(style));
+        },
+      ),
     );
   }
 
   Future<void> _openSearch() async {
-    await showSearch(
+    final result = await showSearch(
       context: context,
       delegate: PositionMapSearchDelegate(
         hintText: PositionLocalizations.of(context).hintSearch,
         searchBloc: BlocProvider.of<SearchBloc>(context),
         user: widget.user,
       ),
-    ).then((value) {
-      if (value != null) {
-        // Traiter le résultat de recherche ici
-      }
-    });
+    );
+
+    if (result != null && mounted) {
+      // Traiter le résultat de recherche ici
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final isLandscape = screenSize.width > screenSize.height;
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final bottomPadding = MediaQuery.of(context).viewPadding.bottom;
 
     changeStatusColor(transparent);
 
@@ -123,91 +132,58 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
             listener: (context, state) {
               if (state is MapInitialized) {
                 _mapBloc.add(GetUserLocationEvent());
-              }
-              if (state is MapStyleSelected) {
-                if (state.style == MapboxStyles.DARK) {
-                  _appBloc.add(const ChangeTheme(AppTheme.darkTheme));
-                } else {
-                  _appBloc.add(const ChangeTheme(AppTheme.lightTheme));
-                }
+              } else if (state is MapStyleSelected) {
+                final newTheme = state.style == MapboxStyles.DARK
+                    ? const ChangeTheme(AppTheme.darkTheme)
+                    : const ChangeTheme(AppTheme.lightTheme);
+                _appBloc.add(newTheme);
               }
             },
           ),
           BlocListener<CategoriesBloc, CategoriesState>(
             listener: (context, state) {
-              if (state is CategoriesLoaded) {
+              if (state is CategoriesLoaded && state.categories != null) {
                 setState(() {
-                  categories = state.categories!;
+                  _categories = state.categories!;
                 });
               }
             },
           ),
         ],
         child: BlocBuilder<MapBloc, MapState>(
+          buildWhen: (previous, current) {
+            // Reconstruire uniquement lors de changements d'état pertinents
+            return current is MapInitial || current is MapStyleSelected;
+          },
           builder: (context, mapState) {
             MapboxOptions.setAccessToken(widget.setting.mapApiKey!);
+
+            final isDarkTheme = _appBloc.state.themeData ==
+                AppThemes.appThemeData[AppTheme.darkTheme];
+
+            final String mapStyle = isDarkTheme
+                ? MapboxStyles.DARK
+                : widget.setting.defaultMapStyle!;
+
             return Stack(
               children: [
                 // Carte MapBox
                 MapWidget(
                   key: const ValueKey("mapWidget"),
                   cameraOptions: CameraOptions(
-                    center: Point(
-                      coordinates: Position(0, 0),
-                    ),
-                    zoom: 2, // Zoom par défaut ajouté
+                    center: Point(coordinates: Position(0, 0)),
+                    zoom: 2,
                   ),
-                  styleUri: _appBloc.state.themeData ==
-                          AppThemes.appThemeData[AppTheme.darkTheme]
-                      ? MapboxStyles.DARK
-                      : widget.setting.defaultMapStyle!,
+                  styleUri: mapStyle,
                   textureView: true,
                   onMapCreated: _handleMapInitialized,
-                  onStyleLoadedListener: (styleLoadedEventData) {
-                    // Traitement supplémentaire lorsque le style est chargé
-                  },
-                  onLongTapListener: (coordinate) {
-                    // Gestion du tap long
-                  },
-                  onTapListener: (coordinate) {
-                    // Gestion du tap
-                  },
+                  onStyleLoadedListener: (_) {}, // Simplifié
+                  onLongTapListener: (_) {}, // Simplifié
+                  onTapListener: (_) {}, // Simplifié
                 ),
 
-                // Interface utilisateur superposée à la carte
-                SafeArea(
-                  child: Column(
-                    children: [
-                      // Barre de recherche
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 8.0),
-                        child: PositionSearchBar(
-                          openDrawer: () {
-                            // Ouvrir le tiroir de navigation
-                          },
-                          openSearch: _openSearch,
-                          labelSearch: PositionLocalizations.of(context).search,
-                          openProfile: () {
-                            // Ouvrir le profil
-                          },
-                        ),
-                      ),
-
-                      // Widget des catégories
-                      Container(
-                        height: isLandscape
-                            ? 50
-                            : 50, // Ajustement pour le mode paysage
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: PositionCategoriesWidget(
-                          categories: categories,
-                          categoryClick: _handleCategoryClick,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                // Interface utilisateur
+                _buildUILayer(isLandscape),
               ],
             );
           },
@@ -215,36 +191,71 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
       ),
 
       // Boutons flottants
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const Spacer(),
-            PositionMapFloatongActionButton(
-              buttonTag: "layers",
-              buttonPressed: _handleStyleSelection,
-              buttonIcon: const Icon(
-                Icons.layers,
-                color: primaryColor,
-              ),
-            ),
-            const SizedBox(height: 10),
-            PositionMapFloatongActionButton(
-              buttonTag: "location",
-              buttonPressed: () {
-                _mapBloc.add(GetUserLocationEvent());
-              },
-              buttonIcon: SvgPicture.asset(
-                "assets/images/svg/icon-my_location.svg",
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
+      floatingActionButton: _buildFloatingButtons(bottomPadding),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+
+  // Extrait en méthode pour plus de clarté
+  Widget _buildUILayer(bool isLandscape) {
+    return SafeArea(
+      child: Column(
+        children: [
+          // Barre de recherche
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PositionSearchBar(
+              openDrawer: () {
+                // Ouvrir le tiroir de navigation
+              },
+              openSearch: _openSearch,
+              labelSearch: PositionLocalizations.of(context).search,
+              openProfile: () {
+                // Ouvrir le profil
+              },
+            ),
+          ),
+
+          // Widget des catégories
+          SizedBox(
+            height: 50,
+            child: PositionCategoriesWidget(
+              categories: _categories,
+              categoryClick: _handleCategoryClick,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Extrait en méthode pour plus de clarté
+  Widget _buildFloatingButtons(double bottomPadding) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomPadding),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Spacer(),
+          PositionMapFloatongActionButton(
+            buttonTag: "layers",
+            buttonPressed: _handleStyleSelection,
+            buttonIcon: const Icon(
+              Icons.layers,
+              color: primaryColor,
+              size: 24,
+            ),
+          ),
+          const SizedBox(height: 10),
+          PositionMapFloatongActionButton(
+            buttonTag: "location",
+            buttonPressed: () => _mapBloc.add(GetUserLocationEvent()),
+            buttonIcon: _locationIcon,
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
     );
   }
 }

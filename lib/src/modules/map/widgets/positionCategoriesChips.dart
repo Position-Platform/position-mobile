@@ -4,49 +4,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:position/src/core/utils/colors.dart';
 
-class PositionCategorieChips extends StatefulWidget {
+class PositionCategorieChips extends StatelessWidget {
   const PositionCategorieChips({
     super.key,
     required this.callback,
     required this.label,
     required this.icon,
   });
+
   final VoidCallback callback;
   final String label;
   final String icon;
 
   @override
-  State<PositionCategorieChips> createState() => _PositionCategorieChipsState();
-}
-
-class _PositionCategorieChipsState extends State<PositionCategorieChips> {
-  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    // Précalculer le style de texte pour éviter les recalculs
+    final textStyle = theme.textTheme.bodyMedium?.copyWith(
+      fontFamily: "OpenSans-Bold",
+      fontSize: 11,
+    );
+
+    // Précalculer le chemin de l'image
+    final iconPath = "assets$icon";
+
     return InkWell(
-      onTap: widget.callback,
+      onTap: callback,
       highlightColor: transparent,
       child: Chip(
         labelPadding: const EdgeInsets.all(1.0),
         shape: StadiumBorder(
-            side: BorderSide(
-          color: Theme.of(context).colorScheme.surface,
-        )),
+          side: BorderSide(
+            color: theme.colorScheme.surface,
+          ),
+        ),
         avatar: CircleAvatar(
           backgroundColor: transparent,
+          // Mise en cache du SvgPicture pour améliorer les performances
           child: SvgPicture.asset(
-            "assets${widget.icon}",
+            iconPath,
             height: 15,
             width: 15,
           ),
         ),
         label: Text(
-          widget.label,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(fontFamily: "OpenSans-Bold", fontSize: 11),
+          label,
+          style: textStyle,
         ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: theme.colorScheme.surface,
         elevation: 10.0,
         shadowColor: transparent,
         padding: const EdgeInsets.all(6.0),

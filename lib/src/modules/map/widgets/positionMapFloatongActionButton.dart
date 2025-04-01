@@ -2,38 +2,35 @@
 
 import 'package:flutter/material.dart';
 
-class PositionMapFloatongActionButton extends StatefulWidget {
-  const PositionMapFloatongActionButton(
-      {super.key,
-      required this.buttonTag,
-      required this.buttonPressed,
-      required this.buttonIcon});
+class PositionMapFloatongActionButton extends StatelessWidget {
+  const PositionMapFloatongActionButton({
+    super.key,
+    required this.buttonTag,
+    required this.buttonPressed,
+    required this.buttonIcon,
+  });
 
   final String buttonTag;
   final VoidCallback buttonPressed;
   final Widget buttonIcon;
 
   @override
-  State<PositionMapFloatongActionButton> createState() =>
-      _PositionMapFloatongActionButtonState();
-}
-
-class _PositionMapFloatongActionButtonState
-    extends State<PositionMapFloatongActionButton> {
-  @override
   Widget build(BuildContext context) {
+    // Optimisation: utilisation de dimensions constantes
+    const double buttonSize = 43;
+
     return SizedBox(
-      width: 43,
-      height: 43,
-      child: FittedBox(
-        child: FloatingActionButton(
-          shape: const CircleBorder(),
-          heroTag: widget.buttonTag,
-          tooltip: widget.buttonTag,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          onPressed: widget.buttonPressed,
-          child: widget.buttonIcon,
-        ),
+      width: buttonSize,
+      height: buttonSize,
+      child: FloatingActionButton(
+        shape: const CircleBorder(),
+        heroTag: buttonTag,
+        tooltip: buttonTag,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        onPressed: buttonPressed,
+        elevation:
+            4.0, // Réduire l'élévation pour améliorer les performances de rendu
+        child: buttonIcon,
       ),
     );
   }

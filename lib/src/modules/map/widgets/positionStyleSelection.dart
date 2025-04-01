@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:position/src/core/utils/colors.dart';
 
-class PositionStyleSelection extends StatefulWidget {
-  const PositionStyleSelection({super.key, required this.onStyleSelected});
+class PositionStyleSelection extends StatelessWidget {
+  const PositionStyleSelection({
+    super.key,
+    required this.onStyleSelected,
+  });
+
   final Function(String style) onStyleSelected;
 
-  @override
-  State<PositionStyleSelection> createState() => _PositionStyleSelectionState();
-}
-
-class _PositionStyleSelectionState extends State<PositionStyleSelection> {
-  final List<Map<String, dynamic>> cardStyles = [
+  // Déplacer les styles en constante de classe pour éviter de les recréer à chaque build
+  static const List<Map<String, dynamic>> _mapStyles = [
     {
       'name': 'GeOsm',
       'image': 'assets/images/png/geosm.png',
@@ -38,52 +38,93 @@ class _PositionStyleSelectionState extends State<PositionStyleSelection> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final theme = Theme.of(context);
+
+    // Adapter la mise en page pour le mode paysage si nécessaire
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+
     return Container(
-      color: Theme.of(context).colorScheme.surface,
-      width: MediaQuery.of(context).size.width,
+      color: theme.colorScheme.surface,
+      width: mediaQuery.size.width,
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.min,
-        children: cardStyles.map((style) {
-          return InkWell(
-            onTap: () {
-              // Fermer le BottomSheet et appliquer le style sélectionné
-              Navigator.pop(context);
-              widget.onStyleSelected(style['style']);
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(3), // Border width
-                    decoration: const BoxDecoration(
-                        color: grey2, shape: BoxShape.circle),
-                    child: ClipOval(
-                      child: SizedBox.fromSize(
-                        // Image radius
-                        child: Image.asset(style['image'],
-                            width: 60, height: 60, fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    style['name'],
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontFamily: "OpenSans-Bold", fontSize: 11),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return isLandscape
+              ? _buildLandscapeLayout(context, theme)
+              : _buildPortraitLayout(context, theme);
+        },
       ),
     );
+  }
+
+  // Organisation pour le mode portrait (vertical)
+  Widget _buildPortraitLayout(BuildContext context, ThemeData theme) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: _buildStyleButtons(context, theme),
+    );
+  }
+
+  // Organisation pour le mode paysage (horizontal)
+  Widget _buildLandscapeLayout(BuildContext context, ThemeData theme) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: _buildStyleButtons(context, theme),
+      ),
+    );
+  }
+
+  // Crée les boutons de style de carte
+  List<Widget> _buildStyleButtons(BuildContext context, ThemeData theme) {
+    return _mapStyles.map((style) {
+      final textStyle = theme.textTheme.bodyMedium?.copyWith(
+        fontFamily: "OpenSans-Bold",
+        fontSize: 11,
+      );
+
+      return InkWell(
+        onTap: () {
+          Navigator.pop(context);
+          onStyleSelected(style['style']);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Image de style de carte
+              Container(
+                padding: const EdgeInsets.all(3),
+                decoration: const BoxDecoration(
+                  color: grey2,
+                  shape: BoxShape.circle,
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    style['image'],
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.cover,
+                    // Optimisation pour le chargement d'images
+                    cacheHeight:
+                        120, // 2x la taille d'affichage pour les écrans haute résolution
+                    cacheWidth: 120,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              // Nom du style
+              Text(
+                style['name'],
+                style: textStyle,
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
   }
 }
