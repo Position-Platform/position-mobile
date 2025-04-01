@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         providers: [
           // Le bloc AppBloc est fourni à l'ensemble de l'application.
           BlocProvider(
-            create: (context) => AppBloc(),
+            create: (context) => getIt<AppBloc>(),
           ),
           BlocProvider<MapBloc>(
             create: (context) => getIt<MapBloc>(),

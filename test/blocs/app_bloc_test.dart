@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/core/utils/themes.dart';
 import 'package:test/test.dart';
 
@@ -11,11 +12,15 @@ import 'package:position/src/modules/app/bloc/app_bloc.dart';
 
 class MockHydratedBlocStorage extends Mock implements HydratedStorage {}
 
+class MockLogService extends Mock implements LogService {}
+
 void main() {
   late HydratedStorage storage;
+  late LogService logger;
 
   setUp(() async {
     storage = MockHydratedBlocStorage();
+    logger = MockLogService();
     when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
     when<dynamic>(() => storage.read(any())).thenReturn(null);
     when(() => storage.delete(any())).thenAnswer((_) async {});
@@ -26,7 +31,7 @@ void main() {
     late AppBloc appBloc;
 
     setUp(() {
-      appBloc = AppBloc();
+      appBloc = AppBloc(logger: logger);
     });
 
     test('initial state is correct', () {

@@ -13,6 +13,7 @@ import 'package:position/firebase_options.dart';
 import 'package:position/src/app.dart';
 import 'package:position/src/core/di/di.dart' as di;
 import 'package:path_provider/path_provider.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/modules/gps/bloc/gps_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -20,6 +21,10 @@ void main() async {
   await runZonedGuarded(() async {
     // Initialisation de tous les widgets
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Initialiser le service de logs
+    await LogService().initialize();
+
     // Initialisation des variables d'environement
     await dotenv.load(fileName: ".env");
     // Initialisation des dependences via getIt
@@ -38,6 +43,9 @@ void main() async {
     );
     // Configuration de l'observateur de BLoC
     Bloc.observer = SimpleBlocObserver();
+
+    // Logger le démarrage de l'application
+    LogService().info('Application démarrée');
 
     // Lancement de l'application
     runApp(BlocProvider(

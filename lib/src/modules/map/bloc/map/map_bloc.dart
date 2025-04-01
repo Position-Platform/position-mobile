@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mapbox;
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/core/utils/configs.dart';
 import 'package:position/src/modules/auth/models/setting_model/setting.dart';
 
@@ -12,11 +13,15 @@ part 'map_state.dart';
 
 class MapBloc extends Bloc<MapEvent, MapState> {
   mapbox.MapboxMap? _mapController;
+  LogService logger;
 
-  MapBloc() : super(MapInitial()) {
+  MapBloc({required this.logger}) : super(MapInitial()) {
     on<OnMapInitializedEvent>(_onInitMap);
     on<GetUserLocationEvent>(_getUserLocation);
     on<UserStyleSelectionEvent>(_userStyleSelection);
+    on<RefreshMapEvent>((event, emit) {
+      emit(MapInitial());
+    });
   }
 
   void _onInitMap(OnMapInitializedEvent event, Emitter<MapState> emit) {
@@ -55,12 +60,16 @@ class MapBloc extends Bloc<MapEvent, MapState> {
             bearing: 180,
             pitch: 30),
         mapbox.MapAnimationOptions(duration: 1000, startDelay: 0));
+    // loguer la position de l'utilisateur
+    logger.info("User location: ${position!.latitude}, ${position.longitude}");
     emit(MapGetUserLocation());
   }
 
   void _userStyleSelection(
       UserStyleSelectionEvent event, Emitter<MapState> emit) {
     _mapController?.loadStyleURI(event.style);
+    // loguer le style de la carte selectionne
+    logger.info("User selected style: ${event.style}");
     emit(MapStyleSelected(
       event.style,
     ));

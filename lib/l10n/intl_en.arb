@@ -63,5 +63,8 @@
   "closed": "Closed",
   "searcherror": "Load error",
   "searchnotfound": "No results found",
-   "hintSearch": "Search"
+   "hintSearch": "Search",
+   "passwordsDontMatch" : "Passwords don't match",
+   "passwordReset" : "password reset",
+   "enterEmailForReset" : "Enter e-mail address to reset"
 }

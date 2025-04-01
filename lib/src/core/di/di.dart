@@ -1,5 +1,6 @@
 import 'package:chopper/chopper.dart';
 import 'package:get_it/get_it.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/modules/auth/api/setting/settingApiService.dart';
 import 'package:position/src/modules/auth/api/setting/settingApiServiceFactory.dart';
 import 'package:position/src/modules/app/bloc/app_bloc.dart';
@@ -55,15 +56,16 @@ Future<void> init() async {
   getIt.registerLazySingleton<AuthApiService>(
       () => AuthApiServiceFactory(apiService));
   getIt.registerLazySingleton<CategoriesApiService>(
-      () => CategoriesApiServiceFactory(apiService));
+      () => CategoriesApiServiceFactory(apiService, getIt()));
   getIt.registerLazySingleton<SearchApiService>(
-      () => SearchApiServiceFactory(apiService));
+      () => SearchApiServiceFactory(apiService, getIt()));
 
   //Utils
   // Enregistrement des instances des différents helpers
   getIt.registerLazySingleton<NetworkInfoHelper>(() => NetworkInfoHelper());
   getIt.registerLazySingleton<SharedPreferencesHelper>(
       () => SharedPreferencesHelper());
+  getIt.registerLazySingleton<LogService>(() => LogService());
 
   // Database
   // Enregistrement des instances des DAO pour accéder à la base de données
@@ -79,6 +81,7 @@ Future<void> init() async {
       settingApiService: getIt(),
       networkInfoHelper: getIt(),
       settingDao: getIt(),
+      logger: getIt(),
     ),
   );
 
@@ -87,7 +90,8 @@ Future<void> init() async {
         authApiService: getIt(),
         networkInfoHelper: getIt(),
         sharedPreferencesHelper: getIt(),
-        userDao: getIt()),
+        userDao: getIt(),
+        logger: getIt()),
   );
 
   getIt.registerFactory<CategoriesRepository>(
@@ -95,31 +99,38 @@ Future<void> init() async {
         categoriesApiService: getIt(),
         networkInfoHelper: getIt(),
         sharedPreferencesHelper: getIt(),
-        categoryDao: getIt()),
+        categoryDao: getIt(),
+        logger: getIt()),
   );
 
   getIt.registerFactory<SearchRepository>(
     () => SearchRepositoryImpl(
       searchApiService: getIt(),
       networkInfoHelper: getIt(),
+      logger: getIt(),
     ),
   );
 
   //Bloc
   // Enregistrement des instances des différents blocs
-  getIt.registerFactory<AppBloc>(() => AppBloc());
-  getIt.registerFactory<GpsBloc>(() => GpsBloc());
+  getIt.registerFactory<AppBloc>(() => AppBloc(logger: getIt()));
+  getIt.registerFactory<GpsBloc>(() => GpsBloc(logger: getIt()));
   getIt.registerFactory<AuthBloc>(() => AuthBloc(
       authRepository: getIt(),
       sharedPreferencesHelper: getIt(),
-      settingRepository: getIt()));
-  getIt.registerFactory<LoginBloc>(() =>
-      LoginBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
-  getIt.registerFactory<RegisterBloc>(() =>
-      RegisterBloc(authRepository: getIt(), sharedPreferencesHelper: getIt()));
-  getIt.registerFactory<MapBloc>(() => MapBloc());
+      settingRepository: getIt(),
+      logger: getIt()));
+  getIt.registerFactory<LoginBloc>(() => LoginBloc(
+      authRepository: getIt(),
+      sharedPreferencesHelper: getIt(),
+      logger: getIt()));
+  getIt.registerFactory<RegisterBloc>(() => RegisterBloc(
+      authRepository: getIt(),
+      sharedPreferencesHelper: getIt(),
+      logger: getIt()));
+  getIt.registerFactory<MapBloc>(() => MapBloc(logger: getIt()));
   getIt.registerFactory<CategoriesBloc>(
-      () => CategoriesBloc(categoriesRepository: getIt()));
-  getIt
-      .registerFactory<SearchBloc>(() => SearchBloc(searchRepository: getIt()));
+      () => CategoriesBloc(categoriesRepository: getIt(), logger: getIt()));
+  getIt.registerFactory<SearchBloc>(
+      () => SearchBloc(searchRepository: getIt(), logger: getIt()));
 }

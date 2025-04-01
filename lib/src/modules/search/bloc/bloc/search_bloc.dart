@@ -2,6 +2,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:position/src/core/services/log.service.dart';
 import 'package:position/src/core/utils/configs.dart';
 import 'package:position/src/modules/auth/models/user_model/user.dart';
 import 'package:position/src/modules/search/models/search_model/datum.dart';
@@ -14,8 +15,10 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchRepository? searchRepository;
+  LogService logger;
   SearchBloc({
     this.searchRepository,
+    required this.logger,
   }) : super(SearchInitial()) {
     on<MakeSearch>(_search);
   }
@@ -29,12 +32,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       var searchResults =
           await searchRepository!.search(event.query!, event.user!.id!);
+      // Log the search results
+      logger.info('Search results: ${searchResults.success}');
 
       List<SearchResultModel> searchResultsModel = [
         ...await _getEtablissementFromResponse(
             searchResults.success!.data!.etablissements!.data!),
         ...await _getPlacesFromResponse(searchResults.success!.data!.places!)
       ];
+      // Log the transformed search results
+      logger.info('Transformed search results: $searchResultsModel');
 
       emit(SearchLoaded(searchResultsModel));
     } catch (e) {
@@ -44,6 +51,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<List<SearchResultModel>> _getPlacesFromResponse(
       List<Place> places) async {
+    // Log the places data
+    logger.info('Places data: $places');
     return [
       for (var i = 0; i < places.length; i++)
         SearchResultModel(
@@ -61,6 +70,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<List<SearchResultModel>> _getEtablissementFromResponse(
       List<Datum> etablissements) async {
+    // Log the etablissements data
+    logger.info('Etablissements data: $etablissements');
     return [
       for (var i = 0; i < etablissements.length; i++)
         SearchResultModel(
@@ -114,6 +125,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         plageHoraire = etablissement.horaires![i].plageHoraire!;
       }
     }
+    // Log the opening hours for the establishment
+    logger.info(
+        'Opening hours for ${etablissement.nom}: $plageHoraire on day $now');
 
     return plageHoraire;
   }

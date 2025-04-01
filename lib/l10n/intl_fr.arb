@@ -62,5 +62,8 @@
   "closed": "Fermé",
   "searcherror": "Erreur de Chargement",
   "searchnotfound": "Aucun resultat trouvé",
-   "hintSearch": "Rechercher"
+   "hintSearch": "Rechercher",
+   "passwordsDontMatch" : "Les mots de passe ne correspondent pas",
+   "passwordReset" : "réinitialisation du mot de passe",
+   "enterEmailForReset" : "Saisir l'e-mail pour réinitialiser"
 }

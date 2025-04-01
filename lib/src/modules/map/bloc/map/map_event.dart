@@ -21,3 +21,5 @@ class UserStyleSelectionEvent extends MapEvent {
 
   const UserStyleSelectionEvent(this.style);
 }
+
+class RefreshMapEvent extends MapEvent {}
