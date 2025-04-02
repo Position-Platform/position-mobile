@@ -152,7 +152,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     // Ré-appliquer le style actuel pour garantir un bon affichage
     if (_currentStyle != null) {
       try {
-        _mapController?.loadStyleURI(_currentStyle!);
+        await _mapController?.loadStyleURI(_currentStyle!);
       } catch (e) {
         logger.error("Error reloading style: $e");
       }

@@ -57,6 +57,9 @@ void main() async {
     print('runZonedGuarded: Caught error in my root zone.');
     print(stackTrace);
     print(error);
+    LogService().error('runZonedGuarded: Caught error in my root zone.');
+    LogService().error(stackTrace.toString());
+    LogService().error(error.toString());
     FirebaseCrashlytics.instance.recordError(error, stackTrace);
   });
 }

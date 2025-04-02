@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           // Le bloc AppBloc est fourni à l'ensemble de l'application.
-          BlocProvider(
+          BlocProvider<AppBloc>(
             create: (context) => getIt<AppBloc>(),
           ),
           BlocProvider<MapBloc>(
