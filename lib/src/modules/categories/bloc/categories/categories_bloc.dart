@@ -10,48 +10,120 @@ part 'categories_event.dart';
 part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
-  CategoriesRepository categoriesRepository;
-  LogService logger;
+  final CategoriesRepository categoriesRepository;
+  final LogService logger;
+
+  // Ajouter une mise en cache des catégories pour améliorer les performances
+  List<Category> _cachedCategories = [];
+  Category? selectedCategory;
+
   CategoriesBloc({
     required this.categoriesRepository,
     required this.logger,
   }) : super(CategoriesInitial()) {
     on<GetCategories>(_getCategories);
     on<CategorieClick>(_selectCategorie);
+    on<GetCategoryById>(_getCategoryById);
+    on<RefreshCategories>(_refreshCategories);
   }
 
-  _getCategories(GetCategories event, Emitter<CategoriesState> emit) async {
+  Future<void> _getCategories(
+      GetCategories event, Emitter<CategoriesState> emit) async {
+    // Si nous avons déjà les catégories en cache, les utiliser directement
+    if (_cachedCategories.isNotEmpty && !event.forceRefresh) {
+      logger
+          .info('Using cached categories (${_cachedCategories.length} items)');
+      emit(CategoriesLoaded(_cachedCategories));
+      return;
+    }
+
     emit(CategoriesLoading());
     try {
-      // Log the request for all categories
       logger.info('Requesting all categories');
-      var categoriesResult = await categoriesRepository.getallcategories();
+      final categoriesResult = await categoriesRepository.getallcategories();
 
-      // Log the response from the API
-      logger.info('All categories response: ${categoriesResult.success}');
+      if (categoriesResult.error != null) {
+        logger.error('Error from repository: ${categoriesResult.error}');
+        emit(CategoriesError(message: categoriesResult.error.toString()));
+        return;
+      }
 
-      if (categoriesResult.success!.isNotEmpty) {
-        categoriesResult.success!.sort((a, b) => b.vues!.compareTo(a.vues!));
-        // Log the sorted categories
-        logger.info('Sorted categories: ${categoriesResult.success}');
-        emit(CategoriesLoaded(categoriesResult.success!));
+      if (categoriesResult.success != null &&
+          categoriesResult.success!.isNotEmpty) {
+        // Trier par nombre de vues décroissant
+        final sortedCategories = List<Category>.from(categoriesResult.success!)
+          ..sort((a, b) => (b.vues ?? 0).compareTo(a.vues ?? 0));
+
+        // Mettre en cache pour une utilisation future
+        _cachedCategories = sortedCategories;
+
+        logger.info('Loaded ${sortedCategories.length} categories');
+        emit(CategoriesLoaded(sortedCategories));
+      } else {
+        logger.info('No categories found');
+        emit(const CategoriesLoaded([]));
       }
     } catch (e) {
-      // Log the error
-      logger.error('Caught error during get all categories: ${e.toString()}');
-      emit(CategoriesError());
+      logger.error('Exception during get all categories: ${e.toString()}');
+      emit(CategoriesError(message: 'Failed to load categories'));
     }
   }
 
-  _selectCategorie(CategorieClick event, Emitter<CategoriesState> emit) async {
+  Future<void> _refreshCategories(
+      RefreshCategories event, Emitter<CategoriesState> emit) async {
+    // Forcer une actualisation à partir du réseau
+    add(const GetCategories(forceRefresh: true));
+  }
+
+  void _selectCategorie(CategorieClick event, Emitter<CategoriesState> emit) {
     try {
-      // Log the category click event
-      logger.info('Category clicked: ${event.category}');
-      emit(CategoriesClicked(event.category));
+      if (event.category == null) {
+        logger.info('Category click event received with null category');
+        return;
+      }
+
+      selectedCategory = event.category;
+      logger.info(
+          'Category selected: ${event.category?.shortname} (ID: ${event.category?.id})');
+      emit(CategoriesClicked(event.category!));
     } catch (e) {
-      // Log the error
-      logger.error('Caught error during category click: ${e.toString()}');
-      emit(CategoriesError());
+      logger.error('Error during category click: ${e.toString()}');
+      emit(CategoriesError(message: 'Failed to select category'));
+    }
+  }
+
+  Future<void> _getCategoryById(
+      GetCategoryById event, Emitter<CategoriesState> emit) async {
+    emit(CategoriesLoading());
+
+    try {
+      // D'abord, vérifier si la catégorie est déjà en cache
+      final cachedCategoryIndex =
+          _cachedCategories.indexWhere((cat) => cat.id == event.id);
+
+      if (cachedCategoryIndex >= 0) {
+        // Catégorie trouvée dans le cache
+        final cachedCategory = _cachedCategories[cachedCategoryIndex];
+        logger.info(
+            'Category found in cache: ${cachedCategory.shortname} (ID: ${cachedCategory.id})');
+        emit(CategoryFound(cachedCategory));
+        return;
+      }
+
+      // Si pas en cache, charger depuis le repository
+      logger.info('Requesting category with ID: ${event.id}');
+      final result = await categoriesRepository.getcategoriebyid(event.id);
+
+      if (result.success != null) {
+        logger.info('Category loaded: ${result.success?.shortname}');
+        emit(CategoryFound(result.success!));
+      } else {
+        logger.error('Category not found with ID: ${event.id}');
+        emit(CategoriesError(message: 'Category not found'));
+      }
+    } catch (e) {
+      logger.error('Error fetching category by ID: ${e.toString()}');
+      emit(CategoriesError(message: 'Failed to load category'));
     }
   }
 }

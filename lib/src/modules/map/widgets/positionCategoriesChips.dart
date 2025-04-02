@@ -19,43 +19,54 @@ class PositionCategorieChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    // Précalculer le style de texte pour éviter les recalculs
     final textStyle = theme.textTheme.bodyMedium?.copyWith(
       fontFamily: "OpenSans-Bold",
-      fontSize: 11,
+      fontSize: 12,
     );
-
-    // Précalculer le chemin de l'image
     final iconPath = "assets$icon";
 
-    return InkWell(
-      onTap: callback,
-      highlightColor: transparent,
-      child: Chip(
-        labelPadding: const EdgeInsets.all(1.0),
-        shape: StadiumBorder(
-          side: BorderSide(
-            color: theme.colorScheme.surface,
+    // Utiliser un Container avec BoxShadow personnalisé au lieu de Card
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(40),
+            blurRadius: 4.0,
+            spreadRadius: 0.0,
+            offset: const Offset(0, 2), // Ombre légèrement décalée vers le bas
+          ),
+        ],
+      ),
+      child: Material(
+        color: transparent,
+        borderRadius: BorderRadius.circular(20.0),
+        child: InkWell(
+          onTap: callback,
+          highlightColor: transparent,
+          borderRadius: BorderRadius.circular(20.0),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  iconPath,
+                  height: 16,
+                  width: 16,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  label,
+                  style: textStyle,
+                ),
+              ],
+            ),
           ),
         ),
-        avatar: CircleAvatar(
-          backgroundColor: transparent,
-          // Mise en cache du SvgPicture pour améliorer les performances
-          child: SvgPicture.asset(
-            iconPath,
-            height: 15,
-            width: 15,
-          ),
-        ),
-        label: Text(
-          label,
-          style: textStyle,
-        ),
-        backgroundColor: theme.colorScheme.surface,
-        elevation: 10.0,
-        shadowColor: transparent,
-        padding: const EdgeInsets.all(6.0),
       ),
     );
   }

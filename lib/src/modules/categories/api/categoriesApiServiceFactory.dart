@@ -1,5 +1,6 @@
-// ignore_for_file: file_names, avoid_print
+// ignore_for_file: file_names
 
+import 'dart:async';
 import 'package:chopper/chopper.dart';
 import 'package:position/src/core/services/apiService.dart';
 import 'package:position/src/core/services/log.service.dart';
@@ -9,64 +10,107 @@ class CategoriesApiServiceFactory implements CategoriesApiService {
   final ApiService? apiService;
   final LogService logger;
 
+  // Cache temporaire pour les requêtes (debouncing)
+  final Map<String, Completer<Response>> _pendingRequests = {};
+
   CategoriesApiServiceFactory(this.apiService, this.logger);
 
   @override
   Future<Response> getAllcategories() async {
-    Response response;
+    const requestKey = 'getAllCategories';
+
+    // Si une requête identique est déjà en cours, attendre son résultat
+    if (_pendingRequests.containsKey(requestKey)) {
+      logger.info('Reusing pending request for all categories');
+      return _pendingRequests[requestKey]!.future;
+    }
+
+    // Créer un nouveau Completer pour cette requête
+    final completer = Completer<Response>();
+    _pendingRequests[requestKey] = completer;
 
     try {
-      // Log the request for all categories
       logger.info('Requesting all categories');
-      response = await apiService!.getcategories();
-      // Log the response from the API
-      logger.info('All categories response: ${response.body}');
+      final response = await apiService!.getcategories();
+      logger.info(
+          'All categories response received, status: ${response.statusCode}');
+
+      // Compléter la requête et la retirer de la liste des requêtes en attente
+      completer.complete(response);
+      _pendingRequests.remove(requestKey);
+
+      return response;
     } catch (e) {
-      // Log the error
-      logger.error('Caught error during get all categories: ${e.toString()}');
-      print('Caught ${e.toString()}');
+      logger.error('Error in getAllcategories: ${e.toString()}');
+
+      // En cas d'erreur, compléter avec une erreur et nettoyer
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+      _pendingRequests.remove(requestKey);
+
       rethrow;
     }
-    return response;
   }
 
   @override
   Future<Response> getCategorieById(int id) async {
-    Response response;
+    final requestKey = 'getCategoryById_$id';
+
+    // Si une requête identique est déjà en cours, attendre son résultat
+    if (_pendingRequests.containsKey(requestKey)) {
+      logger.info('Reusing pending request for category ID: $id');
+      return _pendingRequests[requestKey]!.future;
+    }
+
+    // Créer un nouveau Completer pour cette requête
+    final completer = Completer<Response>();
+    _pendingRequests[requestKey] = completer;
 
     try {
-      // Log the request for category by ID
       logger.info('Requesting category with ID: $id');
-      response = await apiService!.getcategoriesbyid(id);
-      // Log the response from the API
-      logger.info('Category response: ${response.body}');
+      final response = await apiService!.getcategoriesbyid(id);
+      logger.info('Category response received, status: ${response.statusCode}');
+
+      // Compléter la requête et la retirer de la liste des requêtes en attente
+      completer.complete(response);
+      _pendingRequests.remove(requestKey);
+
+      return response;
     } catch (e) {
-      // Log the error
-      logger.error('Caught error during get category by ID: ${e.toString()}');
-      print('Caught ${e.toString()}');
+      logger.error('Error in getCategorieById: ${e.toString()}');
+
+      // En cas d'erreur, compléter avec une erreur et nettoyer
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+      _pendingRequests.remove(requestKey);
+
       rethrow;
     }
-    return response;
   }
 
   @override
   Future<Response> updateCategorieById(
       String token, int id, Map<String, dynamic> body) async {
-    Response response;
-
     try {
-      // Log the request for updating category by ID
-      logger.info('Updating category with ID: $id with body: $body');
-      response = await apiService!.updatecategoriebyid(token, id, body);
-      // Log the response from the API
-      logger.info('Update category response: ${response.body}');
+      logger.info('Updating category with ID: $id');
+      final response = await apiService!.updatecategoriebyid(token, id, body);
+      logger.info('Update category response: ${response.statusCode}');
+      return response;
     } catch (e) {
-      // Log the error
-      logger
-          .error('Caught error during update category by ID: ${e.toString()}');
-      print('Caught ${e.toString()}');
+      logger.error('Error in updateCategorieById: ${e.toString()}');
       rethrow;
     }
-    return response;
+  }
+
+  // Méthode pour annuler toutes les requêtes en cours (utile en cas de fermeture de l'app)
+  void cancelAllRequests() {
+    for (final request in _pendingRequests.values) {
+      if (!request.isCompleted) {
+        request.completeError('Request cancelled');
+      }
+    }
+    _pendingRequests.clear();
   }
 }

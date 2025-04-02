@@ -20,76 +20,194 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   final CategoryDao? categoryDao;
   final LogService logger;
 
+  // Constantes pour la gestion du cache
+  static const String _lastCacheTimeKey = 'categories_last_cache_time';
+  static const int _cacheValidityMinutes =
+      30; // Le cache est valide pendant 30 minutes
+
   CategoriesRepositoryImpl(
-      {this.networkInfoHelper,
-      this.categoriesApiService,
-      this.sharedPreferencesHelper,
-      this.categoryDao,
+      {required this.networkInfoHelper,
+      required this.categoriesApiService,
+      required this.sharedPreferencesHelper,
+      required this.categoryDao,
       required this.logger});
 
   @override
-  Future<Result<List<Category>>> getallcategories() async {
+  Future<Result<List<Category>>> getallcategories(
+      {bool forceRefresh = false}) async {
     try {
-      var localCategories = await categoryDao!.allCategories;
+      // Vérifier si nous devons forcer une actualisation ou si le cache est obsolète
+      final shouldRefresh = forceRefresh || !(await isCacheFresh());
 
-      logger.info(
-          "Local categories: ${localCategories.map((category) => category.category)}");
-
-      if (localCategories.isNotEmpty) {
-        return Result(
-            success:
-                localCategories.map((category) => category.category!).toList());
+      // Si nous n'avons pas besoin de rafraîchir et que nous avons des données locales, les utiliser
+      if (!shouldRefresh) {
+        final localCategories = await categoryDao!.allCategories;
+        if (localCategories.isNotEmpty) {
+          logger.info(
+              "Using cached categories (${localCategories.length} items)");
+          final categories =
+              localCategories.map((cat) => cat.category!).toList();
+          return Result(success: categories);
+        }
       }
 
-      bool isConnected = await networkInfoHelper!.isConnected();
+      // Si pas de données locales ou si on doit rafraîchir, aller sur le réseau
+      final isConnected = await networkInfoHelper!.isConnected();
       if (isConnected) {
-        try {
-          final Response response =
-              await categoriesApiService!.getAllcategories();
-          logger.info("Remote categories response: ${response.body}");
-          var model = CategoriesModel.fromJson(response.body);
-          logger.info("Remote model: ${model.data!.categories}");
-
-          await Future.wait(model.data!.categories!.map((onlineCategory) async {
-            try {
-              await categoryDao!.addCategory(CategoryTableCompanion(
-                  id: Value(onlineCategory.id!),
-                  category: Value(onlineCategory)));
-
-              // log the added category
-              logger.info("Added category: $onlineCategory");
-            } catch (e) {
-              logger.error("Error adding category: $e");
-              return Result(error: DbInsertError());
-            }
-          }));
-
-          return Result(success: model.data!.categories);
-        } catch (e) {
-          logger.error("Error fetching categories from API: $e");
-          return Result(error: ServerError());
-        }
+        return await _fetchCategoriesFromNetwork();
       } else {
-        logger.error("No internet connection. Returning local categories.");
+        // En cas d'absence de connexion, essayer d'utiliser les données locales même si obsolètes
+        final localCategories = await categoryDao!.allCategories;
+        if (localCategories.isNotEmpty) {
+          logger.info(
+              "No internet connection. Using potentially outdated local data.");
+          final categories =
+              localCategories.map((cat) => cat.category!).toList();
+          return Result(success: categories);
+        }
+
+        logger.error("No internet connection and no local cache available.");
         return Result(error: NoInternetError());
       }
     } catch (e) {
-      logger.error("Error retrieving categories: $e");
-      return Result(error: DbGetDataError());
+      logger.error("Error in getallcategories: $e");
+      return Result(error: ServerError());
+    }
+  }
+
+  /// Récupère les catégories depuis le réseau et les met en cache
+  Future<Result<List<Category>>> _fetchCategoriesFromNetwork() async {
+    try {
+      logger.info("Fetching categories from network");
+      final Response response = await categoriesApiService!.getAllcategories();
+
+      if (response.isSuccessful) {
+        final model = CategoriesModel.fromJson(response.body);
+
+        if (model.data?.categories != null &&
+            model.data!.categories!.isNotEmpty) {
+          await _cacheCategories(model.data!.categories!);
+          return Result(success: model.data!.categories);
+        } else {
+          logger.info("API returned empty categories list");
+          return Result(success: []);
+        }
+      } else {
+        logger.error("API error: ${response.statusCode} - ${response.error}");
+        return Result(error: ServerError());
+      }
+    } catch (e) {
+      logger.error("Network error in _fetchCategoriesFromNetwork: $e");
+      return Result(error: ServerError());
+    }
+  }
+
+  /// Met en cache les catégories dans la base de données locale
+  Future<void> _cacheCategories(List<Category> categories) async {
+    try {
+      logger.info("Caching ${categories.length} categories");
+
+      // Utiliser une transaction pour améliorer les performances
+      await categoryDao!.db.transaction(() async {
+        for (final category in categories) {
+          if (category.id != null) {
+            await categoryDao!.addCategory(CategoryTableCompanion(
+              id: Value(category.id!),
+              category: Value(category),
+            ));
+          }
+        }
+      });
+
+      // Enregistrer la date de mise en cache
+      await sharedPreferencesHelper!
+          .setCategoriesLastCacheTime(DateTime.now().millisecondsSinceEpoch);
+
+      logger.info("Categories cached successfully");
+    } catch (e) {
+      logger.error("Error caching categories: $e");
+      throw DbInsertError();
     }
   }
 
   @override
   Future<Result<Category>> getcategoriebyid(int id) async {
     try {
-      var categorie = await categoryDao!.getCategory(id);
+      logger.info("Getting category with ID: $id");
 
-      logger.info("Local category: ${categorie.category}");
+      try {
+        // Tenter de récupérer depuis la base de données locale
+        final category = await categoryDao!.getCategory(id);
+        logger.info(
+            "Found category in local cache: ${category.category?.shortname}");
+        return Result(success: category.category!);
+      } catch (dbError) {
+        logger.error("Category not found in local cache: $dbError");
 
-      return Result(success: categorie.category!);
+        // Si pas trouvé localement et connexion disponible, essayer depuis le réseau
+        final isConnected = await networkInfoHelper!.isConnected();
+        if (isConnected) {
+          logger.info("Fetching category from network");
+          final response = await categoriesApiService!.getCategorieById(id);
+
+          if (response.isSuccessful) {
+            final categoryModel = CategoriesModel.fromJson(response.body);
+            if (categoryModel.data?.categories != null &&
+                categoryModel.data!.categories!.isNotEmpty) {
+              final category = categoryModel.data!.categories!.first;
+
+              // Mettre en cache la catégorie récupérée
+              await categoryDao!.addCategory(CategoryTableCompanion(
+                id: Value(category.id!),
+                category: Value(category),
+              ));
+
+              return Result(success: category);
+            }
+          }
+
+          logger.error("Category not found on server");
+          return Result(error: ServerError());
+        } else {
+          logger.error("No internet connection for fetching category");
+          return Result(error: NoInternetError());
+        }
+      }
     } catch (e) {
-      logger.error("Error retrieving category by ID: $e");
-      return Result(error: DbGetDataError());
+      logger.error("Error in getcategoriebyid: $e");
+      return Result(error: ServerError());
+    }
+  }
+
+  @override
+  Future<void> clearCache() async {
+    try {
+      logger.info("Clearing categories cache");
+      await categoryDao!.deleteAllCategories();
+      await sharedPreferencesHelper!.removeKey(_lastCacheTimeKey);
+      logger.info("Categories cache cleared successfully");
+    } catch (e) {
+      logger.error("Error clearing categories cache: $e");
+      throw DbDeleteError();
+    }
+  }
+
+  @override
+  Future<bool> isCacheFresh() async {
+    try {
+      final lastCacheTime =
+          await sharedPreferencesHelper!.getCategoriesLastCacheTime();
+      if (lastCacheTime == null) return false;
+
+      final cacheAge = DateTime.now().millisecondsSinceEpoch - lastCacheTime;
+      final cacheAgeMinutes = cacheAge ~/ (1000 * 60);
+
+      logger.info(
+          "Cache age: $cacheAgeMinutes minutes (validity: $_cacheValidityMinutes minutes)");
+      return cacheAgeMinutes < _cacheValidityMinutes;
+    } catch (e) {
+      logger.error("Error checking cache freshness: $e");
+      return false;
     }
   }
 }

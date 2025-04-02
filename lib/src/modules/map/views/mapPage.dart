@@ -142,9 +142,9 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
           ),
           BlocListener<CategoriesBloc, CategoriesState>(
             listener: (context, state) {
-              if (state is CategoriesLoaded && state.categories != null) {
+              if (state is CategoriesLoaded) {
                 setState(() {
-                  _categories = state.categories!;
+                  _categories = state.categories;
                 });
               }
             },
@@ -218,7 +218,7 @@ class _MapPageState extends State<MapPage> with WidgetsBindingObserver {
 
           // Widget des catégories
           SizedBox(
-            height: 50,
+            height: 40,
             child: PositionCategoriesWidget(
               categories: _categories,
               categoryClick: _handleCategoryClick,
