@@ -59,7 +59,7 @@ dev_dependencies:
     sdk: flutter
   http_mock_adapter: ^0.6.1
   json_serializable: ^6.9.5
-  mockito: ^5.4.4
+  mockito: ^5.4.6
 
 flutter_icons:
   android: "launcher_icon"
