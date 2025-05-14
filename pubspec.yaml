@@ -58,7 +58,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http_mock_adapter: ^0.6.1
-  json_serializable: ^6.8.0
+  json_serializable: ^6.9.5
   mockito: ^5.4.4
 
 flutter_icons:
