@@ -12,7 +12,7 @@ dependencies:
   cached_network_image: ^3.3.1
   chopper: ^8.0.0
   device_info_plus: ^11.4.0
-  drift: ^2.18.0
+  drift: ^2.26.1
   dropdown_button2: ^2.3.9
   equatable: ^2.0.5
   firebase_core: ^3.12.1
